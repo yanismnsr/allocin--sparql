@@ -3,6 +3,7 @@ import styles from './SearchBar.module.css';
 import { ISearchBarState } from "./ISearchBarState";
 import { ISearchBarProps } from "./ISearchBarProps";
 import { textChangeRangeIsUnchanged } from 'typescript';
+// import {Service} from "../../services/Service";
 
 export default class SearchBar extends React.Component<ISearchBarProps, ISearchBarState> {
 
@@ -10,9 +11,9 @@ export default class SearchBar extends React.Component<ISearchBarProps, ISearchB
     super(props);
 
     // Setting the state
-    this.setState({
-      searchString: ''
-    });
+    this.state = {
+      searchString: 'enter a movie title'
+    };
 
     // Binding handlers
     this._handleChange = this._handleChange.bind(this);
@@ -29,6 +30,7 @@ export default class SearchBar extends React.Component<ISearchBarProps, ISearchB
     // Build the sparql query
     const { searchString } = this.state;
     console.log(searchString);
+
   }
 
   public render() {
