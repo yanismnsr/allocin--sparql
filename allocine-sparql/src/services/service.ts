@@ -1,53 +1,57 @@
+import * as sparql from "sparqljs"
+import { textSpanOverlapsWith } from "typescript";
+
 export class Service {
 
     private static instance : Service;
 
-    private constructor() { }
+    // Sparql service classes
+    private sparqlGenerator : sparql.SparqlGenerator;
+    private sparqlParser : sparql.SparqlParser;
 
-    private static GetInstance() {
+
+    private constructor() { 
+        this.sparqlGenerator = new sparql.Generator();
+        this.sparqlParser = new sparql.Parser();
+    }
+
+    public static GetInstance() {
         if (!Service.instance) {
             Service.instance = new Service();
         }
         return Service.instance;
     }
 
-    public getMovie (movieString: string) {
-        // return fetch(`http://www.allocine.fr/recherche/?q=${movieString}`)
-        //     .then(response => response.text())
-        //     .then(response => {
-        //         const parser = new DOMParser();
-        //         const doc = parser.parseFromString(response, "text/html");
-        //         const movie = doc.querySelector(".movie-list .movie");
-        //         if (movie === null) return;
-        //         const movieTitle = movie.querySelector(".title").textContent;
-        //         const movieYear = movie.querySelector(".year").textContent;
-        //         const moviePoster = movie.querySelector(".poster img").getAttribute("src");
-        //         const movieSynopsis = movie.querySelector(".synopsis").textContent;
-        //         const movieRuntime = movie.querySelector(".runtime").textContent;
-        //         const movieGenre = movie.querySelector(".genre").textContent;
-        //         const movieDirector = movie.querySelector(".director").textContent;
-        //         const movieActors = movie.querySelector(".actors").textContent;
-        //         const movieCountry = movie.querySelector(".country").textContent;
-        //         const movieRating = movie.querySelector(".rating").textContent;
-        //         const movieVotes = movie.querySelector(".votes").textContent;
-        //         const movieUrl = movie.querySelector(".title a").getAttribute("href");
-        //         const movieId = movieUrl.split("/")[4];
-        //         return {
-        //             title: movieTitle,
-        //             year: movieYear,
-        //             poster: moviePoster,
-        //             synopsis: movieSynopsis,
-        //             runtime: movieRuntime,
-        //             genre: movieGenre,
-        //             director: movieDirector,
-        //             actors: movieActors,
-        //             country: movieCountry,
-        //             rating: movieRating,
-        //             votes: movieVotes,
-        //             url: movieUrl,
-        //             id: movieId
-        //         };
-        //     });
+    public async getMovie (movieString: string) {
+        const prefixes : string [] = [
+            'PREFIX dbo: <http://dbpedia.org/ontology/>',
+            'PREFIX dbpedia2: <http://dbpedia.org/property/>'
+        ]
+
+        const query = prefixes.join("\n") +
+        'SELECT * GROUP_CONCAT(?starring, SEPARATOR="; ") WHERE {' +
+            '?movie a <http://dbpedia.org/ontology/Film> ;'+
+                'dbpedia2:title ?title;' + 
+                'dbo:director ?director.'+
+                '?movie dbo:wikiPageID ?wikiPageID.'+
+                '?movie <http://dbpedia.org/ontology/genre> ?genre . '+
+                '?movie <http://dbpedia.org/ontology/thumbnail> ?thumbnail .'+
+                '?movie <http://dbpedia.org/ontology/releaseDate> ?releaseDate .' +
+                '?movie <http://dbpedia.org/ontology/starring> ?starring .' +
+            '}' + 
+            "limit 50";
+
+        const parsedQuery = this.sparqlParser.parse(query);
+
+        const stringQuery = this.sparqlGenerator.stringify(parsedQuery);
+        console.log(stringQuery);
+        console.log(parsedQuery);
+
+        // Make request to dbpedia
+        const response = await fetch(`http://dbpedia.org/sparql?query=${encodeURIComponent(stringQuery)}&format=json`);
+        const json = await response.json();
+        console.log(json);
+        
     }
 
 }

@@ -1,9 +1,10 @@
 import React from 'react';
+import * as sparql from 'sparqljs';
 import styles from './SearchBar.module.css';
 import { ISearchBarState } from "./ISearchBarState";
 import { ISearchBarProps } from "./ISearchBarProps";
 import { textChangeRangeIsUnchanged } from 'typescript';
-// import {Service} from "../../services/Service";
+import {Service} from "../../services/Service";
 
 export default class SearchBar extends React.Component<ISearchBarProps, ISearchBarState> {
 
@@ -30,6 +31,9 @@ export default class SearchBar extends React.Component<ISearchBarProps, ISearchB
     // Build the sparql query
     const { searchString } = this.state;
     console.log(searchString);
+
+    const serviceInstance = Service.GetInstance();
+    serviceInstance.getMovie(searchString);
 
   }
 
