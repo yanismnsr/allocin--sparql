@@ -33,8 +33,7 @@ export default class SearchBar extends React.Component<ISearchBarProps, ISearchB
     console.log(searchString);
 
     const serviceInstance = Service.GetInstance();
-    serviceInstance.getMovie(searchString);
-
+    serviceInstance.fetchMovie({"title": searchString}, {"size": 10, "page": 1});
   }
 
   public render() {
