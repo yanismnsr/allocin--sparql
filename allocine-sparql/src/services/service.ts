@@ -29,7 +29,7 @@ export class Service {
         ]
 
         const query = prefixes.join("\n") +
-        'SELECT * GROUP_CONCAT(?starring, SEPARATOR="; ") WHERE {' +
+        'SELECT * WHERE {' +
             '?movie a <http://dbpedia.org/ontology/Film> ;'+
                 'dbpedia2:title ?title;' + 
                 'dbo:director ?director.'+
