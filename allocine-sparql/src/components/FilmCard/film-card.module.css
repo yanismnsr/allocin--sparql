@@ -1,0 +1,62 @@
+.filmCard{
+    width: 230px;
+    border-radius: 15px;
+    position: relative;
+}
+
+.filmImageBox{
+    height: 300px;
+    width: 100%;
+    background-color: #C4C4C4;
+    border-radius: 15px;
+
+    overflow: hidden;
+}
+
+.filmImage {
+    min-width: 100%;
+    min-height: 100%;
+}
+
+.filmContent {
+    margin-top: 10px;
+    text-align: left;
+}
+
+.filmTitle {
+    font-size: 1.2rem;
+    color: white;
+    margin-top: 15px;
+}
+
+.filmSeparator{
+    width: 70%;
+    height: 1px;
+    background-color: #C4C4C4;
+    margin: 5px auto;
+}
+
+.filmDescription{
+    font-size: 0.8rem;
+    margin: 0 15px;
+    line-height: 1.5;
+}
+
+.filmYear {
+    font-size: 0.8rem;
+    color: #C4C4C4;
+    line-height: 1.5;
+}
+
+.filmAuthor{
+    height: 50px;
+    width: 50px;
+    position: absolute;
+    left: 90px;
+    top: 125px;
+}
+
+.row {
+    display: flex;
+    justify-content: space-between;
+}

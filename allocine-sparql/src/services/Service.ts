@@ -1,5 +1,4 @@
 import * as sparql from "sparqljs"
-import { textSpanOverlapsWith } from "typescript";
 
 export class Service {
 
