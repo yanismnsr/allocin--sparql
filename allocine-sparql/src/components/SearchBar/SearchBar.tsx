@@ -40,7 +40,7 @@ export default class SearchBar extends React.Component<ISearchBarProps, ISearchB
     return (
       <div className={styles.SearchBar}>
         <div className={styles.box}>
-            <img src="./images/logo.png" alt="Logo" className={styles.logo} />
+            <img src="/images/logo.png" alt="Logo" className={styles.logo} />
             <input type="text" id="filmName" onChange={this._handleChange} className={styles.inputSearchBar}/>
             <button type="submit" onClick={this._handleSearch} className={styles.searchButton}>Rechercher</button>
         </div>
