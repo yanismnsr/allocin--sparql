@@ -10,7 +10,7 @@ export class Service {
     private sparqlParser : sparql.SparqlParser;
 
 
-    private constructor() { 
+    private constructor() {
         this.sparqlGenerator = new sparql.Generator();
         this.sparqlParser = new sparql.Parser();
     }
@@ -31,14 +31,14 @@ export class Service {
         const query = prefixes.join("\n") +
         'SELECT * WHERE {' +
             '?movie a <http://dbpedia.org/ontology/Film> ;'+
-                'dbpedia2:title ?title;' + 
+                'dbpedia2:title ?title;' +
                 'dbo:director ?director.'+
                 '?movie dbo:wikiPageID ?wikiPageID.'+
                 '?movie <http://dbpedia.org/ontology/genre> ?genre . '+
                 '?movie <http://dbpedia.org/ontology/thumbnail> ?thumbnail .'+
                 '?movie <http://dbpedia.org/ontology/releaseDate> ?releaseDate .' +
                 '?movie <http://dbpedia.org/ontology/starring> ?starring .' +
-            '}' + 
+            '}' +
             "limit 50";
 
         const parsedQuery = this.sparqlParser.parse(query);
@@ -51,7 +51,7 @@ export class Service {
         const response = await fetch(`http://dbpedia.org/sparql?query=${encodeURIComponent(stringQuery)}&format=json`);
         const json = await response.json();
         console.log(json);
-        
+
     }
 
     public async fetchMovie (q: any, p: any) {
@@ -62,14 +62,14 @@ export class Service {
 
         const query = prefixes.join("\n") +
         'SELECT *  WHERE {' +
-            '?movie a <http://dbpedia.org/ontology/Film> .'+ 
+            '?movie a <http://dbpedia.org/ontology/Film> .'+
                 '?movie dbo:wikiPageID ?wikiPageID .'+
                 'OPTIONAL { ?movie <http://dbpedia.org/ontology/genre> ?genre . }'+
                 'OPTIONAL { ?movie <http://dbpedia.org/ontology/thumbnail> ?thumbnail . }'+
                 'OPTIONAL { ?movie <http://dbpedia.org/ontology/releaseDate> ?releaseDate . }' +
                 'OPTIONAL { ?movie <http://dbpedia.org/ontology/starring> ?starring . }' +
                 setCriterias(q) +
-            '}' + 
+            '}' +
             setPaginations(p);
 
         console.log(query);
@@ -82,7 +82,7 @@ export class Service {
         const response = await fetch(`http://dbpedia.org/sparql?query=${encodeURIComponent(stringQuery)}&format=json`);
         const json = await response.json();
         console.log(json);
-        
+
     }
 
 }
