@@ -1,4 +1,5 @@
 import * as sparql from "sparqljs"
+import { textSpanOverlapsWith } from "typescript";
 
 export class Service {
 
@@ -24,19 +25,20 @@ export class Service {
     public async getMovie (movieString: string) {
         const prefixes : string [] = [
             'PREFIX dbo: <http://dbpedia.org/ontology/>',
-            'PREFIX dbpedia2: <http://dbpedia.org/property/>'
+            'PREFIX dbpedia2: <http://dbpedia.org/property/>',
+            'PREFIX dct: <http://purl.org/dc/terms/>'
         ]
 
         const query = prefixes.join("\n") +
-        'SELECT * WHERE {' +
+            'SELECT * WHERE {' +
             '?movie a <http://dbpedia.org/ontology/Film> ;'+
-                'dbpedia2:title ?title;' +
-                'dbo:director ?director.'+
-                '?movie dbo:wikiPageID ?wikiPageID.'+
-                '?movie <http://dbpedia.org/ontology/genre> ?genre . '+
-                '?movie <http://dbpedia.org/ontology/thumbnail> ?thumbnail .'+
-                '?movie <http://dbpedia.org/ontology/releaseDate> ?releaseDate .' +
-                '?movie <http://dbpedia.org/ontology/starring> ?starring .' +
+            'dbpedia2:title ?title;' +
+            'dbo:director ?director.'+
+            '?movie dbo:wikiPageID ?wikiPageID.'+
+            '?movie <http://dbpedia.org/ontology/genre> ?genre . '+
+            '?movie <http://dbpedia.org/ontology/thumbnail> ?thumbnail .'+
+            '?movie <http://dbpedia.org/ontology/releaseDate> ?releaseDate .' +
+            '?movie <http://dbpedia.org/ontology/starring> ?starring .' +
             '}' +
             "limit 50";
 
@@ -56,18 +58,14 @@ export class Service {
     public async fetchMovie (q: any, p: any) {
         const prefixes : string [] = [
             'PREFIX dbo: <http://dbpedia.org/ontology/>',
-            'PREFIX dbpedia2: <http://dbpedia.org/property/>'
+            'PREFIX dbpedia2: <http://dbpedia.org/property/>',
+            'PREFIX dct: <http://purl.org/dc/terms/>'
         ]
 
         const query = prefixes.join("\n") +
-        'SELECT *  WHERE {' +
+            'SELECT *  WHERE {' +
             '?movie a <http://dbpedia.org/ontology/Film> .'+
-                '?movie dbo:wikiPageID ?wikiPageID .'+
-                'OPTIONAL { ?movie <http://dbpedia.org/ontology/genre> ?genre . }'+
-                'OPTIONAL { ?movie <http://dbpedia.org/ontology/thumbnail> ?thumbnail . }'+
-                'OPTIONAL { ?movie <http://dbpedia.org/ontology/releaseDate> ?releaseDate . }' +
-                'OPTIONAL { ?movie <http://dbpedia.org/ontology/starring> ?starring . }' +
-                setCriterias(q) +
+            setCriterias(q) +
             '}' +
             setPaginations(p);
 
@@ -88,29 +86,55 @@ export class Service {
 
 const setCriterias = (criterias: any) => {
     let criteria = ``;
-    if(criterias.country){
-        criteria += `OPTIONAL { ?movie dbpedia2:country ?country. FILTER(?country like '%${criterias.country}%') . }`
+    if (criterias.country) {
+        criteria += `?movie dbpedia2:country ?country. FILTER(?country = '${criterias.country}'@en) .`
     }
-    if(criterias.lessRuntime){
-        criteria += `OPTIONAL { ?movie dbo:runtime ?lessRuntime. FILTER(?lessRuntime <= ${criterias.lessRuntime}) . }`
+    if (criterias.lessRuntime) {
+        criteria += `?movie dbo:runtime ?lessRuntime. FILTER(?lessRuntime <= ${criterias.lessRuntime}) .`
     }
-    if(criterias.moreRuntime){
-        criteria += `OPTIONAL { ?movie dbo:runtime ?moreRuntime. FILTER(?moreRuntime > ${criterias.moreRuntime}) . }`
+    if (criterias.moreRuntime) {
+        criteria += `?movie dbo:runtime ?moreRuntime. FILTER(?moreRuntime > ${criterias.moreRuntime}) .`
     }
-    if(criterias.lessGross){
-        criteria += `OPTIONAL { ?movie dbo:gross ?lessGross. FILTER(?lessGross <= ${criterias.lessGross}) . }`
+    if (criterias.lessGross) {
+        criteria += `?movie dbo:gross ?lessGross. FILTER(?lessGross <= \"${criterias.lessGross}\") .`
     }
-    if(criterias.moreGross){
-        criteria += `OPTIONAL { ?movie dbo:gross ?moreGross. FILTER(?moreGross > ${criterias.moreGross}) . }`
+    if (criterias.moreGross) {
+        criteria += `?movie dbo:gross ?moreGross. FILTER(?moreGross > \"${criterias.moreGross}\") .`
     }
-    if(criterias.beforeYear){
-        criteria += `OPTIONAL { ?movie dbpedia2:recorded ?beforeYear. FILTER(?beforeYear > ${criterias.beforeYear}). }`
+    if (criterias.beforeYear){
+        criteria += `?movie dbpedia2:released ?beforeYear. FILTER(?beforeYear > ${criterias.beforeYear}).`
     }
     if(criterias.afterYear){
-        criteria += `OPTIONAL { ?movie dbpedia2:recorded ?afterYear. FILTER(?afterYear <= ${criterias.afterYear}). }`
+        criteria += `?movie dbpedia2:released ?afterYear. FILTER(?afterYear < ${criterias.afterYear}).`
+    }
+    if(criterias.released){
+        criteria += `?movie dbpedia2:released ?released. FILTER(?released = ${criterias.released}).`
+    }
+    if (criterias.director){
+        criteria += `?movie dbpedia2:director ?director. FILTER(?director = ${criterias.director}).`
+    }
+    if (criterias.type){
+        criteria += `?movie dbpedia2:type ?type. FILTER(?type <= ${criterias.type}).`
+    }
+    if (criterias.starring){
+        criteria += `?movie dbpedia2:starring ?starring. FILTER(?starring <= ${criterias.starring}).`
+    }
+    if (criterias.language){
+        criteria += `?movie dbpedia2:language ?language. FILTER(?language <= ${criterias.language}).`
+    }
+    if (criterias.producer){
+        criteria += `?movie dbpedia2:producer ?producer. FILTER(?producer <= ${criterias.producer}).`
+    }
+    if (criterias.music){
+        criteria += `?movie dbpedia2:music ?music. FILTER(?music <= ${criterias.music}).`
     }
     if(criterias.title){
-        criteria += `?movie dbpedia2:title ?movietitle . FILTER(regex(?movietitle,'.*${criterias.title}.*', 'i')) .`
+        criteria += `?movie dbpedia2:title ?movietitle. FILTER(regex(?movietitle,'.*${criterias.title}.*', 'i')) .`
+    }
+    if (criterias.category){
+        let mots = criterias.category.split(" ");
+        criterias.category = '(?=.*'+ mots.join('.*).*(?=.*') + '.*).*';
+        criteria += `?movie dct:subject ?s. FILTER(regex(?s, \'${criterias.category}\', 'i')) .`
     }
     return criteria;
 }
