@@ -21,9 +21,9 @@ export default function Carousel(props:any) {
                             <Slide index={key}>
                                 <FilmCard
                                     filmTitle={movie.title}
-                                    filmYear={movie.releaseYear}
-                                    filmThumbnail={movie.urlThumbnail}
-                                    filmRanking={movie.ranking}
+                                    filmYear={movie.releaseYear!}
+                                    filmThumbnail={movie.urlThumbnail!}
+                                    filmRanking={movie.ranking!}
                                 />
                             </Slide>
                         );

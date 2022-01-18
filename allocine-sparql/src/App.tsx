@@ -6,6 +6,7 @@ import Details from "./components/Details/Details";
 import { BrowserRouter, Route, Routes} from "react-router-dom";
 import Carousel from "./components/Carousel/Carousel";
 import {Movie} from "./models/types";
+import Home from './components/Home/Home';
 
 function App() {
 
@@ -64,16 +65,13 @@ function App() {
   return (
     <div className="App">
       <SearchBar/>
-<<<<<<< HEAD
       <BrowserRouter>
         <Routes>
-          <Route path="/" />
+          <Route path="/" element={<Home/>} />
           <Route path="/details" element={<Details/>} />
         </Routes>
       </BrowserRouter>
-=======
       <Carousel movies={movies}/>
->>>>>>> e0552a463ad7b3fce0574289188a4c611c994512
     </div>
   );
 }
