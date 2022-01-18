@@ -13,7 +13,7 @@
 }
 
 .logo {
-    width: 21em;
+    width: 13em;
 }
 
 .inputSearchBar {
@@ -24,9 +24,11 @@
     background-color: #1B1B2A;
     border: 1px solid #343447;
     color: #9E9CB4;
+    font-family: "Lucida Console", "Courier New", monospace;
 }
 
 .searchButton {
+    margin-bottom: 2.5em;
     padding: 1em;
     width: 10em;
     height: 4.5em;
@@ -34,12 +36,11 @@
     border: 1px solid #343447;
     background-color: #1B1B2A;
     color: #9E9CB4;
+    font-family: "Lucida Console", "Courier New", monospace;
 }
 
 .boxFiltres {
-    margin-left: 8em;
     display: flex;
-    margin-bottom: 3em;
     align-content: space-between;
 }
 
@@ -51,21 +52,24 @@
     border: none;
     cursor: pointer;
     padding: 0.5em;
+    font-family: "Lucida Console", "Courier New", monospace;
 }
 
 /* Dropdown Content (Hidden by Default) */
 .dropdownContent {
     display: none;
     position: absolute;
-    min-width: 160px;
+    min-width: 6em;
     z-index: 1;
     padding-left: 0.8em;
+    padding-right: 0.8em;
     flex-direction: column;
     text-align: left;
     border-radius: 0.5em;
     border: 1px solid #343447;
     background-color: #1B1B2A;
     color: #9E9CB4;
+    font-family: "Lucida Console", "Courier New", monospace;
 }
 
 /* Links inside the dropdown */
@@ -84,8 +88,33 @@
     display: flex;
 }
 
-
 /* Change the background color of the dropdown button when the dropdown content is shown */
 .buttonDropdown:hover {
-  color: #3e8e41;
+  color: #FFC05D;
+}
+
+.dropdownYear {
+    width: 15em;
+    height: 8em;
+}
+
+
+.ratingCss div {
+  font-size: 2em;
+  width: fit-content;
+  height: fit-content;
+}
+
+.ratingCss input {
+  display: none;
+}
+
+.ratingCss input + label {
+  font-size: 0.7em;
+  cursor: pointer;
+  color: #FFC05D;
+}
+
+.ratingCss input:checked + label ~ label {
+  color: #838383;
 }
