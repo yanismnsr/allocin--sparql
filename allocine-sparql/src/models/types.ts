@@ -21,7 +21,11 @@ export interface Movie {
 }
 
 export default interface Actor {
+    description: string,
     name: string,
     birthDate: string,
+    birthPlace: string,
+    birthName: string,
     thumbnail: string,
+    nationality: string
 }
