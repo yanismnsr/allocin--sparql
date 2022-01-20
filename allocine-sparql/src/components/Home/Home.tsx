@@ -14,29 +14,27 @@ export default function Home (props: IHomeProps) {
         movies: []
     });
 
-    console.log(state.movies);
-
     useEffect(() => {
-        
-    })
-    
-    console.log("getting movies from dbpedia");
-    const serviceInstance = Service.GetInstance();
-    serviceInstance.fetchMovie({}, {size:10, page:1}).then((result) => {
-        console.log(result.results.bindings);
-        const movies = result.results.bindings.map((m: any) => {
-            return {
-                title: m.title,
-                description: "test",
-                releaseYear: m.released.value,
-                urlThumbnail: m.thumbnail.value,
-                ranking: 2.5
-            }
-        })
-        setState({
-            movies : movies
-        })
-    });
+        console.log("getting movies from dbpedia");
+        const serviceInstance = Service.GetInstance();
+        serviceInstance.fetchMovie({}, {size:10, page:1}).then((result) => {
+            console.log(result.results.bindings);
+            const movies = result.results.bindings.map((m: any) => {
+                return {
+                    title: m.title,
+                    description: "test",
+                    releaseYear: m.released.value,
+                    urlThumbnail: m.thumbnail.value,
+                    ranking: 2.5
+                }
+            })
+            setState({
+                movies : movies
+            })
+        });
+        console.log(state.movies);
+
+    }, []);
 
     return (
         <div>
