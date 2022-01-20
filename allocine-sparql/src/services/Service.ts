@@ -63,8 +63,11 @@ export class Service {
         ]
 
         const query = prefixes.join("\n") +
-            'SELECT *  WHERE {' +
-            '?movie a <http://dbpedia.org/ontology/Film> .'+
+            '\nSELECT *  WHERE {' +
+            '?movie a dbo:Film . \n'+
+            '?movie dbo:thumbnail ?thumbnail .\n' +
+            '?movie dbpedia2:title ?movietitle.\n' +
+            '?movie dbpedia2:released ?released.\n' +
             setCriterias(q) +
             '}' +
             setPaginations(p);
@@ -73,12 +76,13 @@ export class Service {
         const parsedQuery = this.sparqlParser.parse(query);
 
         const stringQuery = this.sparqlGenerator.stringify(parsedQuery);
-        console.log(parsedQuery);
+        console.log(stringQuery);
 
         // Make request to dbpedia
         const response = await fetch(`http://dbpedia.org/sparql?query=${encodeURIComponent(stringQuery)}&format=json`);
         const json = await response.json();
-        console.log(json);
+
+        return json;
 
     }
 

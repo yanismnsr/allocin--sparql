@@ -16,7 +16,7 @@ export default function Carousel(props:any) {
         >
             <Slider>
                 {
-                    props.movies.map((movie: Movie, key: number) => {
+                    props.movies.map((movie: Movie, key: number) => { 
                         return (
                             <Slide index={key}>
                                 <FilmCard

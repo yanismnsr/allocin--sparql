@@ -71,7 +71,7 @@ function App() {
           <Route path="/details" element={<Details/>} />
         </Routes>
       </BrowserRouter>
-      <Carousel movies={movies}/>
+      {/* <Carousel movies={movies}/> */}
     </div>
   );
 }

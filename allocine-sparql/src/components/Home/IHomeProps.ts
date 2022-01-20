@@ -1,1 +1,3 @@
-export default interface IHomeProps {}
+export default interface IHomeProps {
+    
+}
