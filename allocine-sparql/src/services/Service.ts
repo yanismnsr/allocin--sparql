@@ -1,5 +1,6 @@
 import * as sparql from "sparqljs"
 import { textSpanOverlapsWith } from "typescript";
+import {trackPromise} from "react-promise-tracker";
 
 export class Service {
 
@@ -79,7 +80,7 @@ export class Service {
         console.log(stringQuery);
 
         // Make request to dbpedia
-        const response = await fetch(`http://dbpedia.org/sparql?query=${encodeURIComponent(stringQuery)}&format=json`);
+        const response = await trackPromise(fetch(`http://dbpedia.org/sparql?query=${encodeURIComponent(stringQuery)}&format=json`));
         const json = await response.json();
 
         return json;

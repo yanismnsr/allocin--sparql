@@ -10,36 +10,10 @@ import Carousel from '../Carousel/Carousel';
 
 export default function Home (props: IHomeProps) {
 
-    const [state, setState] = useState<IHomeState>({
-        movies: []
-    });
-
-    useEffect(() => {
-        console.log("getting movies from dbpedia");
-        const serviceInstance = Service.GetInstance();
-        serviceInstance.fetchMovie({}, {size:10, page:1}).then((result) => {
-            console.log(result.results.bindings);
-            const movies = result.results.bindings.map((m: any) => {
-                return {
-                    title: m.title,
-                    description: "test",
-                    releaseYear: m.released.value,
-                    urlThumbnail: m.thumbnail.value,
-                    ranking: 2.5
-                }
-            })
-            setState({
-                movies : movies
-            })
-        });
-        console.log(state.movies);
-
-    }, []);
-
     return (
         <div>
             <h1 className={styles.whitetext}>Home</h1>
-            <Carousel movies={state.movies}/>
+            <Carousel movies={props.movies}/>
         </div>
     );
 

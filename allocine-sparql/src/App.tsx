@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import logo from './logo.svg';
 import './App.css';
 import SearchBar from "./components/SearchBar/SearchBar"
@@ -7,72 +7,48 @@ import { BrowserRouter, Route, Routes} from "react-router-dom";
 import Carousel from "./components/Carousel/Carousel";
 import {Movie} from "./models/types";
 import Home from './components/Home/Home';
+import {Service} from "./services/Service";
+import {Spinner} from "./components/Spinner/Spinner";
+import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
+
 
 function App() {
 
-  const movies: Movie[] = [
-      {
-          title: "Film 1",
-          description: "test",
-          releaseYear: "2015",
-          urlThumbnail: "https://picsum.photos/200/300",
-          ranking: 1
-      },
-      {
-          title: "Film 2",
-          description: "test",
-          releaseYear: "2015",
-          urlThumbnail: "https://picsum.photos/200/300",
-          ranking: 2
-      },
-      {
-          title: "Film 3",
-          description: "test",
-          releaseYear: "2015",
-          urlThumbnail: "https://picsum.photos/200/300",
-          ranking: 3
-      },
-      {
-          title: "Film 4",
-          description: "test",
-          releaseYear: "2015",
-          urlThumbnail: "https://picsum.photos/200/300",
-          ranking: 3.7
-      },
-      {
-          title: "Film 5",
-          description: "test",
-          releaseYear: "2015",
-          urlThumbnail: "https://picsum.photos/200/300",
-          ranking: 4.8
-      },
-      {
-          title: "Film 6",
-          description: "test",
-          releaseYear: "2015",
-          urlThumbnail: "https://picsum.photos/200/300",
-          ranking: 4.5
-      },
-      {
-          title: "Film 7",
-          description: "test",
-          releaseYear: "2015",
-          urlThumbnail: "https://picsum.photos/200/300",
-          ranking: 2.5
-      }
-  ]
+    const [movies, setMovies] = React.useState<Movie[]>([]);
+    const [selectedMovie, setSelectedMovie] = React.useState<Movie>();
 
-  return (
-    <div className="App">
-      <SearchBar/>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Home/>} />
-          <Route path="/details" element={<Details/>} />
-        </Routes>
-      </BrowserRouter>
-      {/* <Carousel movies={movies}/> */}
-    </div>
+    useEffect(() => {
+        console.log("getting movies from dbpedia");
+        const serviceInstance = Service.GetInstance();
+        serviceInstance.fetchMovie({}, {size:10, page:1}).then((result) => {
+            console.log(result.results.bindings);
+            const foundMovies = result.results.bindings.map((m: any) => {
+                return {
+                    title: m.title,
+                    description: "test",
+                    releaseYear: m.released.value,
+                    urlThumbnail: m.thumbnail.value,
+                    ranking: 2.5
+                }
+            })
+            setMovies(foundMovies);
+        });
+        console.log(movies);
+
+    }, []);
+
+    return (
+        <div className="App">
+            <SearchBar setMovies={setMovies}/>
+                <BrowserRouter>
+                    <Routes>
+                        <Route path="/" element={<Home movies={movies}/>} />
+                        <Route path="/details" element={<Details selectedMovie={selectedMovie}/>} />
+                    </Routes>
+                </BrowserRouter>
+            <Spinner/>
+            {/* <Carousel movies={movies}/> */}
+        </div>
   );
 }
 
