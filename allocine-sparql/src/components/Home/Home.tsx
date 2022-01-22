@@ -15,15 +15,14 @@ export default function Home (props: IHomeProps) {
     });
 
     useEffect(() => {
-        console.log("getting movies from dbpedia");
         const serviceInstance = Service.GetInstance();
         serviceInstance.fetchMovie({}, {size:10, page:1}).then((result) => {
             console.log(result.results.bindings);
             const movies = result.results.bindings.map((m: any) => {
                 return {
-                    title: m.title,
+                    title: m.movietitle.value,
                     description: "test",
-                    releaseYear: m.released.value,
+                    releaseYear: m.releaseDate.value,
                     urlThumbnail: m.thumbnail.value,
                     ranking: 2.5
                 }

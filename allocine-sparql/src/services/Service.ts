@@ -65,12 +65,13 @@ export class Service {
         const query = prefixes.join("\n") +
             '\nSELECT *  WHERE {' +
             '?movie a dbo:Film . \n'+
-            '?movie dbo:thumbnail ?thumbnail .\n' +
+            // '?movie dbo:thumbnail ?thumbnail .\n' +
             '?movie dbpedia2:title ?movietitle.\n' +
             '?movie dbpedia2:released ?released.\n' +
+            '?movie dbo:releaseDate ?releaseDate.\n' +
             setCriterias(q) +
-            '}' +
-            setPaginations(p);
+            '} ORDER BY DESC(?releaseDate)' +
+            setPaginations(p)
 
         console.log(query);
         const parsedQuery = this.sparqlParser.parse(query);
@@ -79,7 +80,7 @@ export class Service {
         console.log(stringQuery);
 
         // Make request to dbpedia
-        const response = await fetch(`http://dbpedia.org/sparql?query=${encodeURIComponent(stringQuery)}&format=json`);
+        const response = await fetch(`http://dbpedia.org/sparql?query=${encodeURIComponent(query)}&format=json`);
         const json = await response.json();
 
         return json;
@@ -149,7 +150,7 @@ const setPaginations = (p: any) => {
         page += `LIMIT ${p.size} `
     }
     if(p.page && p.page>0){
-        page += `OFFSET ${p.size*(p.page-1)}`
+        // page += `OFFSET ${p.size*(p.page-1)}`
     }
     return page;
 }
