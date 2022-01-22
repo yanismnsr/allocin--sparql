@@ -20,13 +20,14 @@ export default function Home (props: IHomeProps) {
             console.log(result.results.bindings);
             const movies = result.results.bindings.map((m: any) => {
                 return {
-                    title: m.movietitle.value,
+                    title: m.title.value,
                     description: "test",
-                    releaseYear: m.releaseDate.value,
-                    urlThumbnail: m.depiction.value,
+                    releaseYear: m.releaseYear.value,
+                    urlThumbnail: m.urlThumbnail.value,
                     ranking: 2.5
                 }
             })
+            console.log(movies);
             setState({
                 movies : movies
             })
@@ -38,7 +39,7 @@ export default function Home (props: IHomeProps) {
     return (
         <div>
             <h1 className={styles.whitetext}>Home</h1>
-            <Carousel movies={props.movies}/>
+            <Carousel movies={state.movies}/>
         </div>
     );
 

@@ -97,24 +97,3 @@
     width: 15em;
     height: 8em;
 }
-
-
-.ratingCss div {
-  font-size: 2em;
-  width: fit-content;
-  height: fit-content;
-}
-
-.ratingCss input {
-  display: none;
-}
-
-.ratingCss input + label {
-  font-size: 0.7em;
-  cursor: pointer;
-  color: #FFC05D;
-}
-
-.ratingCss input:checked + label ~ label {
-  color: #838383;
-}

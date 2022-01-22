@@ -24,7 +24,7 @@ function App() {
             console.log(result.results.bindings);
             const foundMovies = result.results.bindings.map((m: any) => {
                 return {
-                    title: m.title,
+                    title: m.title.value,
                     description: "test",
                     releaseYear: m.released.value,
                     urlThumbnail: m.depiction.value,
