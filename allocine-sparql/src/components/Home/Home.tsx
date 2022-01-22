@@ -23,7 +23,7 @@ export default function Home (props: IHomeProps) {
                     title: m.movietitle.value,
                     description: "test",
                     releaseYear: m.releaseDate.value,
-                    urlThumbnail: m.thumbnail.value,
+                    urlThumbnail: m.depiction.value,
                     ranking: 2.5
                 }
             })

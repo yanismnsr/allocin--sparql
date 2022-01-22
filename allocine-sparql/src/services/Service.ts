@@ -59,7 +59,8 @@ export class Service {
         const prefixes : string [] = [
             'PREFIX dbo: <http://dbpedia.org/ontology/>',
             'PREFIX dbpedia2: <http://dbpedia.org/property/>',
-            'PREFIX dct: <http://purl.org/dc/terms/>'
+            'PREFIX dct: <http://purl.org/dc/terms/>',
+            'PREFIX foaf: <http://xmlns.com/foaf/0.1/>'
         ]
 
         const query = prefixes.join("\n") +
@@ -69,8 +70,10 @@ export class Service {
             '?movie dbpedia2:title ?movietitle.\n' +
             '?movie dbpedia2:released ?released.\n' +
             '?movie dbo:releaseDate ?releaseDate.\n' +
+            '?movie dbpedia2:country ?country.\n' +
+            '?movie foaf:depiction ?depiction.\n' +
             setCriterias(q) +
-            '} ORDER BY DESC(?releaseDate)' +
+            '} ORDER BY DESC(?releaseDate) ' +
             setPaginations(p)
 
         console.log(query);
@@ -92,7 +95,7 @@ export class Service {
 const setCriterias = (criterias: any) => {
     let criteria = ``;
     if (criterias.country) {
-        criteria += `?movie dbpedia2:country ?country. FILTER(?country = '${criterias.country}'@en) .`
+        criteria += ` FILTER(?country = '${criterias.country}'@en) .`
     }
     if (criterias.lessRuntime) {
         criteria += `?movie dbo:runtime ?lessRuntime. FILTER(?lessRuntime <= ${criterias.lessRuntime}) .`
