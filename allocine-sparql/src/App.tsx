@@ -27,7 +27,7 @@ function App() {
                     title: m.title,
                     description: "test",
                     releaseYear: m.released.value,
-                    urlThumbnail: m.thumbnail.value,
+                    urlThumbnail: m.depiction.value,
                     ranking: 2.5
                 }
             })
