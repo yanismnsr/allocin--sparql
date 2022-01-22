@@ -33,7 +33,7 @@ export class Service {
       '\nSELECT *  WHERE {' +
       '?movie a dbo:Film . \n' +
       '?movie dbo:thumbnail ?thumbnail .\n' +
-      '?movie dbpedia2:title ?movietitle.\n' +
+      '?movie dbpedia2:title ?title.\n' +
       '?movie dbpedia2:released ?released.\n' +
       setCriterias(q) +
       '}' +
@@ -104,7 +104,7 @@ const setCriterias = (criterias: any) => {
     criteria += `?movie dbpedia2:music ?music. FILTER(?music <= ${criterias.music}).`;
   }
   if (criterias.title) {
-    criteria += `?movie dbpedia2:title ?movietitle. FILTER(regex(?movietitle,'.*${criterias.title}.*', 'i')) .`;
+    criteria += `?movie dbpedia2:title ?title. FILTER(regex(?title,'.*${criterias.title}.*', 'i')) .`;
   }
   if (criterias.category) {
     let mots = criterias.category.split(' ');

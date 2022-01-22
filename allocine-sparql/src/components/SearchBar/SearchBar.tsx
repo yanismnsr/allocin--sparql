@@ -42,7 +42,7 @@ export default class SearchBar extends React.Component<ISearchBarProps, ISearchB
         console.log(result.results.bindings);
         const foundMovies = result.results.bindings.map((m: any) => {
             return {
-                title: m.movietitle.value,
+                title: m.title.value,
                 description: "test",
                 releaseYear: m.released.value,
                 urlThumbnail: m.thumbnail.value,
