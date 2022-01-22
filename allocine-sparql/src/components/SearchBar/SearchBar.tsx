@@ -38,14 +38,15 @@ export default class SearchBar extends React.Component<ISearchBarProps, ISearchB
     console.log(searchString);
 
     const serviceInstance = Service.GetInstance();
-    trackPromise(serviceInstance.fetchMovie({"title": searchString}, {size:10, page:1})).then((result) => {
-        console.log(result.results.bindings);
+    trackPromise(serviceInstance.fetchMovie({"title": searchString}, {size:100, page:1})).then((result) => {
+        //console.log(result.results.bindings);
         const foundMovies = result.results.bindings.map((m: any) => {
+          console.log(m);
             return {
                 title: m.title.value,
                 description: "test",
-                releaseYear: m.released.value,
-                urlThumbnail: m.thumbnail.value,
+                releaseYear: (m.releaseYear) ? m.releaseYear.value : "Undefined",
+                urlThumbnail: (m.thumbnail) ? m.thumbnail.value : "http://imgsrc.cineserie.com/2017/02/Filmandclapboard.jpg?ver=1",
                 ranking: 2.5
             }
         });
