@@ -16,7 +16,10 @@ export default class SearchBar extends React.Component<ISearchBarProps, ISearchB
 
     // Setting the state
     this.state = {
-      searchString: 'Enter a movie...'
+      searchString: 'Enter a movie...',
+      yearMin: 1891,
+      yearMax: 2022,
+      genres: []
     };
 
     // Binding handlers
@@ -32,11 +35,31 @@ export default class SearchBar extends React.Component<ISearchBarProps, ISearchB
     })
   }
 
+  private _addOrRemoveGenre (event: React.ChangeEvent<HTMLInputElement>) {
+    const { genres } = this.state;
+    if(genres.includes(event.target.value)) {
+        const index = genres.indexOf(event.target.value, 0);
+        if (index > -1) {
+           genres.splice(index, 1);
+        }
+    }else{
+        genres.push(event.target.value);
+    }
+  }
+
+  private _year (value: any) {
+    this.setState({
+        yearMin: value.min,
+        yearMax: value.max
+    })
+  }
+
   private _handleSearch() {
     // Build the sparql query
-    const { searchString } = this.state;
-    console.log(searchString);
-
+    const { searchString, yearMin, yearMax, genres } = this.state;
+    console.log("searchString : " + searchString);
+    console.log("yearMin : " + yearMin + " yearMax : " + yearMax);
+    console.log("genres : " + genres);
     const serviceInstance = Service.GetInstance();
     trackPromise(serviceInstance.fetchMovie({"title": searchString}, {size:100, page:1})).then((result) => {
         //console.log(result.results.bindings);
@@ -57,14 +80,6 @@ export default class SearchBar extends React.Component<ISearchBarProps, ISearchB
     });
   }
 
-  private _addOrRemoveGenre (event: React.ChangeEvent<HTMLInputElement>) {
-    //TODO
-  }
-
-  private _year (min: number, max: number) {
-    //TODO
-    console.log(min)
-  }
 
   public render() {
     return (
@@ -82,6 +97,10 @@ export default class SearchBar extends React.Component<ISearchBarProps, ISearchB
                                     <label>Action</label>
                               </p>
                               <p>
+                                    <input type="checkbox" id="thriller" name="genre" value="comic" onChange={this._addOrRemoveGenre} />
+                                    <label>Comic</label>
+                              </p>
+                              <p>
                                     <input type="checkbox" id="romance" name="genre" value="romance" onChange={this._addOrRemoveGenre} />
                                     <label>Romance</label>
                               </p>
@@ -97,25 +116,8 @@ export default class SearchBar extends React.Component<ISearchBarProps, ISearchB
                                 <MultiRangeSlider
                                       min={1891}
                                       max={2022}
-                                      onChange={({ min, max }) => this._year(min, max)}
+                                      onChange={this._year}
                                     />
-                              </div>
-                            </div>
-                            <div className={`${styles.dropdown} ${styles.ratingCss}`}>
-                            <button className={styles.buttonDropdown}>Rating</button>
-                              <div className={`${styles.dropdownContent} ${styles.dropdownYear}`}>
-                                <div className={styles.starIcon}>
-                                  <input type="radio" name="rating1" id="rating1" />
-                                  <label htmlFor="rating1">★</label>
-                                  <input type="radio" name="rating1" id="rating2" />
-                                  <label htmlFor="rating2">★</label>
-                                  <input type="radio" name="rating1" id="rating3" />
-                                  <label htmlFor="rating3">★</label>
-                                  <input type="radio" name="rating1" id="rating4" />
-                                  <label htmlFor="rating4">★</label>
-                                  <input type="radio" name="rating1" id="rating5" />
-                                  <label htmlFor="rating5">★</label>
-                                </div>
                               </div>
                             </div>
                         </div>
