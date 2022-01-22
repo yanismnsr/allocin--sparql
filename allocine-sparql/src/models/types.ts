@@ -19,9 +19,12 @@ export interface Movie {
     urlThumbnail?: string,
     ranking?: number
 }
-
 export default interface Actor {
+    description: string,
     name: string,
     birthDate: string,
+    birthPlace: string,
+    birthName: string,
     thumbnail: string,
+    nationality: string
 }
