@@ -33,9 +33,9 @@ export class Service {
 
         const query = prefixes.join("\n") +
             '\nSELECT *  WHERE {' +
-            '?movie a dbo:Film . \n'+
+            '?movie ^dbpedia2:films ?of . \n'+
             // '?movie dbo:thumbnail ?thumbnail .\n' +
-            '?movie dbpedia2:title ?movietitle.\n' +
+            '?movie dbpedia2:label ?movietitle.\n' +
             '?movie dbpedia2:released ?released.\n' +
             '?movie dbo:releaseDate ?releaseDate.\n' +
             '?movie dbpedia2:country ?country.\n' +

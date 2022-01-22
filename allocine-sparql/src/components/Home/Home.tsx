@@ -27,6 +27,7 @@ export default function Home (props: IHomeProps) {
                     ranking: 2.5
                 }
             })
+            console.log(movies);
             setState({
                 movies : movies
             })
@@ -38,7 +39,7 @@ export default function Home (props: IHomeProps) {
     return (
         <div>
             <h1 className={styles.whitetext}>Home</h1>
-            <Carousel movies={props.movies}/>
+            <Carousel movies={state.movies}/>
         </div>
     );
 
