@@ -38,7 +38,7 @@ export default function Home (props: IHomeProps) {
     return (
         <div>
             <h1 className={styles.whitetext}>Home</h1>
-            <Carousel movies={state.movies}/>
+            <Carousel movies={props.movies}/>
         </div>
     );
 

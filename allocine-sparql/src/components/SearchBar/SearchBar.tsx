@@ -6,6 +6,8 @@ import { ISearchBarProps } from "./ISearchBarProps";
 import { textChangeRangeIsUnchanged } from 'typescript';
 import {Service} from "../../services/Service";
 import MultiRangeSlider from "./../MultiRangeSlider";
+import { trackPromise } from 'react-promise-tracker';
+
 
 export default class SearchBar extends React.Component<ISearchBarProps, ISearchBarState> {
 
@@ -36,7 +38,22 @@ export default class SearchBar extends React.Component<ISearchBarProps, ISearchB
     console.log(searchString);
 
     const serviceInstance = Service.GetInstance();
-    serviceInstance.fetchMovie({"title": searchString}, {"size": 10, "page": 1});
+    trackPromise(serviceInstance.fetchMovie({"title": searchString}, {size:10, page:1})).then((result) => {
+        console.log(result.results.bindings);
+        const foundMovies = result.results.bindings.map((m: any) => {
+            return {
+                title: m.movietitle.value,
+                description: "test",
+                releaseYear: m.released.value,
+                urlThumbnail: m.thumbnail.value,
+                ranking: 2.5
+            }
+        });
+        console.log(foundMovies);
+
+        // @ts-ignore
+        this.props.setMovies(foundMovies);
+    });
   }
 
   private _addOrRemoveGenre (event: React.ChangeEvent<HTMLInputElement>) {

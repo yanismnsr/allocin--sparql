@@ -1,5 +1,6 @@
-import * as sparql from "sparqljs"
-import { textSpanOverlapsWith } from "typescript";
+import * as sparql from 'sparqljs';
+import { textSpanOverlapsWith } from 'typescript';
+import { trackPromise } from 'react-promise-tracker';
 
 export class Service {
 
@@ -20,39 +21,6 @@ export class Service {
             Service.instance = new Service();
         }
         return Service.instance;
-    }
-
-    public async getMovie (movieString: string) {
-        const prefixes : string [] = [
-            'PREFIX dbo: <http://dbpedia.org/ontology/>',
-            'PREFIX dbpedia2: <http://dbpedia.org/property/>',
-            'PREFIX dct: <http://purl.org/dc/terms/>'
-        ]
-
-        const query = prefixes.join("\n") +
-            'SELECT * WHERE {' +
-            '?movie a <http://dbpedia.org/ontology/Film> ;'+
-            'dbpedia2:title ?title;' +
-            'dbo:director ?director.'+
-            '?movie dbo:wikiPageID ?wikiPageID.'+
-            '?movie <http://dbpedia.org/ontology/genre> ?genre . '+
-            '?movie <http://dbpedia.org/ontology/thumbnail> ?thumbnail .'+
-            '?movie <http://dbpedia.org/ontology/releaseDate> ?releaseDate .' +
-            '?movie <http://dbpedia.org/ontology/starring> ?starring .' +
-            '}' +
-            "limit 50";
-
-        const parsedQuery = this.sparqlParser.parse(query);
-
-        const stringQuery = this.sparqlGenerator.stringify(parsedQuery);
-        console.log(stringQuery);
-        console.log(parsedQuery);
-
-        // Make request to dbpedia
-        const response = await fetch(`http://dbpedia.org/sparql?query=${encodeURIComponent(stringQuery)}&format=json`);
-        const json = await response.json();
-        console.log(json);
-
     }
 
     public async fetchMovie (q: any, p: any) {

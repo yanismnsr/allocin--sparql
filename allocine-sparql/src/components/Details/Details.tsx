@@ -3,9 +3,9 @@ import { useLocation } from 'react-router-dom';
 import { Route, Routes, useMatch } from 'react-router-dom';
 import styles from './Details.module.css';
 
-export default function Details() {
+export default function Details(props: any) {
 
-    const {search} = useLocation (); 
+    const {search} = useLocation ();
 
     console.log(search)
 
