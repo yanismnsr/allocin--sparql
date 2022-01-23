@@ -97,3 +97,11 @@
     width: 15em;
     height: 8em;
 }
+
+.radioElement{
+    margin : 0 20px;
+}
+
+.radioGroup {
+    padding: 0.5em;
+}

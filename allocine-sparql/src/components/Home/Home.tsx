@@ -46,21 +46,43 @@ export default function Home (props: IHomeProps) {
 
     }, []);
 */
-    console.log(Array.from(Array(maxPage - minPage + 1).keys()))
+    function handleChangeSearchParams(pageNumber : number){
+        setState({
+            movies: state.movies,
+            currentPage: pageNumber
+        })
+        setSearchParams("page=" + pageNumber);
+        
+        const serviceInstance = Service.GetInstance();
+        serviceInstance.fetchMovie({}, {size:15, page:pageNumber}).then((result) => {
+            console.log(result.results.bindings);
+            const movies = result.results.bindings.map((m: any) => {
+                return {
+                    title: m.title.value,
+                    description: "test",
+                    releaseYear: m.releaseYear?.value,
+                    urlThumbnail: m.urlThumbnail?.value
+                }
+            })
+            console.log(movies);
+            props.setMovies(movies);
+        });
+
+    }
 
     return (
         <div className={styles.whitetext}>
             <h1 >Latest movies</h1>
             <MoviesGrid movies={props.movies}/>
             <div className={styles.center}>
-                {/* {
+                {
                     Array.from(Array(maxPage - minPage + 1).keys()).map((_, i) => {
                         console.log("something")
                         return (
-                            <span onClick={_ => setSearchParams()}> {minPage + i+1} </span>
+                            <a onClick={_ => handleChangeSearchParams((minPage + i))}> {minPage + i} </a>
                         )
                     })
-                } */}
+                }
             </div>
         </div>
     );
