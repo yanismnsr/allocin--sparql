@@ -1,0 +1,14 @@
+.container {
+    color:white;
+    display:grid;
+    grid-template-columns:repeat(3, 1fr);
+    grid-template-rows: auto;
+    width:80%;
+    margin:0 auto;
+    grid-gap: 20px;
+}
+
+.center-aligned-item {
+    justify-content: center;
+    justify-self:center;
+}

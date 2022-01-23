@@ -9,8 +9,6 @@ export interface Movie {
     producer?: string,
     runtime?: number,
     starring?: Actor[],
-
-
     budget?: number,
     wikiId?: number,
     country?: string,

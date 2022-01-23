@@ -70,7 +70,7 @@ export default class SearchBar extends React.Component<ISearchBarProps, ISearchB
                 title: m.title.value,
                 description: "test",
                 releaseYear: (m.releaseYear) ? m.releaseYear.value : "Undefined",
-                urlThumbnail: (m.thumbnail) ? m.thumbnail.value : "http://imgsrc.cineserie.com/2017/02/Filmandclapboard.jpg?ver=1",
+                urlThumbnail: (m.urlThumbnail) ? m.urlThumbnail.value : "https://imgsrc.cineserie.com/2017/02/Filmandclapboard.jpg?ver=1",
                 ranking: 2.5
             }
         });

@@ -104,123 +104,118 @@ export class Service {
   }
 }
 
-
-
+  
 const setActorCriterias = (criterias: any) => {
-  let criteria = ``;
-  if(criterias.name){
-      let mots = criterias.name.split(" ");
-      if(mots.length>1){
-          criterias.name = '(?=.*'+ mots.join('.*).*(?=.*') + '.*).*';
-          criteria += `?actor dbo:birthName ?name. 
+    let criteria = ``
+    if (criterias.name) {
+        let mots = criterias.name.split(' ')
+        if (mots.length > 1) {
+            criterias.name = '(?=.*' + mots.join('.*).*(?=.*') + '.*).*'
+            criteria += `?actor dbo:birthName ?name. 
                        FILTER(regex(?name,\'${criterias.name}\', 'i') && langMatches(lang(?description),'en')) .`
-      }
-      else{
-          criteria += `?movie dbo:birthName ?name. 
+        } else {
+            criteria += `?movie dbo:birthName ?name. 
                        FILTER(regex(?name,'.*${criterias.name}.*', 'i') && langMatches(lang(?description),'en')) .`
-      }
-  }
-  return criteria;
+        }
+    }
+    return criteria
 }
-
 
 const setCriterias = (criterias: any) => {
-  let criteria = ``;
-  if (criterias.country) {
-    criteria += `?movie dbpedia2:country ?country. FILTER(?country = '${criterias.country}'@en) .`;
-  }
-  if (criterias.lessRuntime) {
-    criteria += `?movie dbo:runtime ?lessRuntime. FILTER(?lessRuntime <= ${criterias.lessRuntime}) .`;
-  }
-  if (criterias.moreRuntime) {
-    criteria += `?movie dbo:runtime ?moreRuntime. FILTER(?moreRuntime > ${criterias.moreRuntime}) .`;
-  }
-  if (criterias.lessGross) {
-    criteria += `?movie dbo:gross ?lessGross. FILTER(?lessGross <= \"${criterias.lessGross}\") .`;
-  }
-  if (criterias.moreGross) {
-    criteria += `?movie dbo:gross ?moreGross. FILTER(?moreGross > \"${criterias.moreGross}\") .`;
-  }
-  if (criterias.beforeYear) {
-    criteria += `?movie dbpedia2:released ?beforeYear. FILTER(?beforeYear > ${criterias.beforeYear}).`;
-  }
-  if (criterias.afterYear) {
-    criteria += `?movie dbpedia2:released ?afterYear. FILTER(?afterYear < ${criterias.afterYear}).`;
-  }
-  if (criterias.released) {
-    criteria += `?movie dbpedia2:released ?released. FILTER(?released = ${criterias.released}).`;
-  }
-  if (criterias.director) {
-    criteria += `?movie dbpedia2:director ?director. FILTER(?director = ${criterias.director}).`;
-  }
-  if (criterias.type) {
-    criteria += `?movie dbpedia2:type ?type. FILTER(?type <= ${criterias.type}).`;
-  }
-  if (criterias.starring) {
-    criteria += `?movie dbpedia2:starring ?starring. FILTER(?starring <= ${criterias.starring}).`;
-  }
-  if (criterias.language) {
-    criteria += `?movie dbpedia2:language ?language. FILTER(?language <= ${criterias.language}).`;
-  }
-  if (criterias.producer) {
-    criteria += `?movie dbpedia2:producer ?producer. FILTER(?producer <= ${criterias.producer}).`;
-  }
-  if (criterias.music) {
-    criteria += `?movie dbpedia2:music ?music. FILTER(?music <= ${criterias.music}).`;
-  }
-  if(criterias.title){
-    let mots = criterias.title.split(" ");
-    if(mots.length>1){
-        criterias.title = '(?=.*'+ mots.join('.*).*(?=.*') + '.*).*';
-        criteria += `?movie dbpedia2:title ?title. 
+    let criteria = ``
+    if (criterias.country) {
+        criteria += `?movie dbpedia2:country ?country. FILTER(?country = '${criterias.country}'@en) .`
+    }
+    if (criterias.lessRuntime) {
+        criteria += `?movie dbo:runtime ?lessRuntime. FILTER(?lessRuntime <= ${criterias.lessRuntime}) .`
+    }
+    if (criterias.moreRuntime) {
+        criteria += `?movie dbo:runtime ?moreRuntime. FILTER(?moreRuntime > ${criterias.moreRuntime}) .`
+    }
+    if (criterias.lessGross) {
+        criteria += `?movie dbo:gross ?lessGross. FILTER(?lessGross <= \"${criterias.lessGross}\") .`
+    }
+    if (criterias.moreGross) {
+        criteria += `?movie dbo:gross ?moreGross. FILTER(?moreGross > \"${criterias.moreGross}\") .`
+    }
+    if (criterias.beforeYear) {
+        criteria += `?movie dbpedia2:released ?beforeYear. FILTER(?beforeYear > ${criterias.beforeYear}).`
+    }
+    if (criterias.afterYear) {
+        criteria += `?movie dbpedia2:released ?afterYear. FILTER(?afterYear < ${criterias.afterYear}).`
+    }
+    if (criterias.released) {
+        criteria += `?movie dbpedia2:released ?released. FILTER(?released = ${criterias.released}).`
+    }
+    if (criterias.director) {
+        criteria += `?movie dbpedia2:director ?director. FILTER(?director = ${criterias.director}).`
+    }
+    if (criterias.type) {
+        criteria += `?movie dbpedia2:type ?type. FILTER(?type <= ${criterias.type}).`
+    }
+    if (criterias.starring) {
+        criteria += `?movie dbpedia2:starring ?starring. FILTER(?starring <= ${criterias.starring}).`
+    }
+    if (criterias.language) {
+        criteria += `?movie dbpedia2:language ?language. FILTER(?language <= ${criterias.language}).`
+    }
+    if (criterias.producer) {
+        criteria += `?movie dbpedia2:producer ?producer. FILTER(?producer <= ${criterias.producer}).`
+    }
+    if (criterias.music) {
+        criteria += `?movie dbpedia2:music ?music. FILTER(?music <= ${criterias.music}).`
+    }
+    if (criterias.title) {
+        let mots = criterias.title.split(' ')
+        if (mots.length > 1) {
+            criterias.title = '(?=.*' + mots.join('.*).*(?=.*') + '.*).*'
+            criteria += `?movie dbpedia2:title ?title. 
                      FILTER(regex(?title,\'${criterias.title}\', 'i')) .`
-    }
-    else{
-        criteria += `?movie dbpedia2:title ?title. 
+        } else {
+            criteria += `?movie dbpedia2:title ?title. 
                      FILTER(regex(?title,'.*${criterias.title}.*', 'i')) .`
+        }
+    } else {
+        criteria += `?movie dbo:title ?title.`
     }
-}
-else{
-  criteria += `OPTIONAL {?movie dbo:title ?title.}`
-}
-if (criterias.category){
-    let mots = criterias.category.split(" ");
-    criterias.category = '(?=.*'+ mots.join('.*).*(?=.*') + '.*).*';
-    criteria += `?movie dct:subject ?s. FILTER(regex(?s, \'${criterias.category}\', 'i')) .`
-}
+    if (criterias.category) {
+        let mots = criterias.category.split(' ')
+        criterias.category = '(?=.*' + mots.join('.*).*(?=.*') + '.*).*'
+        criteria += `?movie dct:subject ?s. FILTER(regex(?s, \'${criterias.category}\', 'i')) .`
+    }
   return criteria;
 };
 
 const setPaginations = (p: any) => {
-  let page = ``;
-  if (p.size) {
-    page += `LIMIT ${p.size} `;
-  }
-  if (p.page && p.page > 0) {
-    page += `OFFSET ${p.size * (p.page - 1)}`;
-  }
-  return page;
-};
+    let page = ``
+    if (p.size) {
+        page += `LIMIT ${p.size} `
+    }
+    if (p.page && p.page > 0) {
+        page += `OFFSET ${p.size * (p.page - 1)}`
+    }
+    return page
+}
 
 const actorParameters = () => {
-  let res = ``;
-  // description
-  res += `OPTIONAL {?actor dbo:abstract ?description. 
-          Filter(langMatches(lang(?description),'en')).}`;
-  // urlThumbnail
-  res += `OPTIONAL {?actor dbo:thumbnail ?thumbnail.}`;
-  // name
-  res += `OPTIONAL {?actor dbo:birthName ?name.
-                    Filter(langMatches(lang(?name),'en')).}`;
-  // birthDate
-  res += `OPTIONAL {?actor dbo:birthDate ?birthDate.}`;
-  // birthPlace
-  res += `OPTIONAL {?actor dbo:birthPlace ?birthPlace.}`;
-  // birthName
-  res += `OPTIONAL {?actor dbo:birthName ?birthName.}`;
-  // nationality
-  res += `OPTIONAL {?actor dbo:thumbnail ?thumbnail.}`;
-  return res;
+    let res = ``
+    // description
+    res += `OPTIONAL {?actor dbo:abstract ?description. 
+          Filter(langMatches(lang(?description),'en')).}`
+    // urlThumbnail
+    res += `OPTIONAL {?actor dbo:thumbnail ?thumbnail.}`
+    // name
+    res += `OPTIONAL {?actor dbo:birthName ?name.
+                    Filter(langMatches(lang(?name),'en')).}`
+    // birthDate
+    res += `OPTIONAL {?actor dbo:birthDate ?birthDate.}`
+    // birthPlace
+    res += `OPTIONAL {?actor dbo:birthPlace ?birthPlace.}`
+    // birthName
+    res += `OPTIONAL {?actor dbo:birthName ?birthName.}`
+    // nationality
+    res += `OPTIONAL {?actor dbo:thumbnail ?thumbnail.}`
+    return res
 }
 
 const movieParameters = () => {
