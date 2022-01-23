@@ -91,17 +91,16 @@ export class Service {
   public async fetchMovieApi(q: any){
     const client = new imdb.Client({apiKey: 'fcdb092d'});
     if(q.title){
-      client.search({'name': q.title}).then((search) => {
+      return client.search({'name': q.title}).then((search) => {
         console.log(search.results);
           return search.results;
       });
     }
     if(q.id){
-      client.get({id: q.id}, {apiKey: 'fcdb092d'}).then((result) => {
-        console.log(result);
+      return client.get({id: q.id}, {apiKey: 'fcdb092d'}).then((result) => {
         return result;
       });
-    }    
+    } 
   }
 }
 
