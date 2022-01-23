@@ -11,15 +11,20 @@ import MoviesGrid from '../MoviesGrid/MoviesGrid'
 
 export default function Home (props: IHomeProps) {
 
-    const [state, setState] = useState<IHomeState>({
-        movies: []
-    });
-
     const [searchParams, setSearchParams] = useSearchParams();
     const page = searchParams.get("page")
-    console.log(page);
 
+    const [state, setState] = useState<IHomeState>({
+        movies: [],
+        currentPage : page ? parseInt(page) : 1,
+    });
 
+    const minPage = Math.max(state.currentPage - 4, 1);
+    const maxPage = minPage + 9;
+
+    console.log(minPage);
+    console.log(maxPage);
+    
     useEffect(() => {
         const serviceInstance = Service.GetInstance();
         serviceInstance.fetchMovie({}, {size:15, page:1}).then((result) => {
@@ -34,18 +39,28 @@ export default function Home (props: IHomeProps) {
             })
             console.log(movies);
             setState({
-                movies : movies
+                movies : movies,
+                currentPage : state.currentPage
             })
         });
 
     }, []);
 
+    console.log(Array.from(Array(maxPage - minPage + 1).keys()))
+
     return (
-        <div>
-            <h1 className={styles.whitetext}>Latest movies</h1>
+        <div className={styles.whitetext}>
+            <h1 >Latest movies</h1>
             <MoviesGrid movies={state.movies}/>
-            <div>
-                
+            <div className={styles.center}>
+                {/* {
+                    Array.from(Array(maxPage - minPage + 1).keys()).map((_, i) => {
+                        console.log("something")
+                        return (
+                            <span onClick={_ => setSearchParams()}> {minPage + i+1} </span>
+                        )
+                    })
+                } */}
             </div>
         </div>
     );
