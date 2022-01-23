@@ -61,15 +61,25 @@ export default class SearchBar extends React.Component<ISearchBarProps, ISearchB
     console.log("yearMin : " + yearMin + " yearMax : " + yearMax);
     console.log("genres : " + genres);
     const serviceInstance = Service.GetInstance();
-    trackPromise(serviceInstance.fetchMovie({"title": searchString, "beforeYear": yearMin, "afterYear": yearMax, "genres": genres}, {size:10, page:1})).then((result) => {
-        console.log(result.results.bindings);
-        const foundMovies = result.results.bindings.map((m: any) => {
-          console.log(m);
+    trackPromise(serviceInstance.fetchMovie({"title": searchString}, {size:100, page:1})).then((result) => {
+        //console.log(result.results.bindings);
+        var res = result.results.bindings.reduce((accumalator:any, current:any) => {
+          if (
+            !accumalator.some(
+              (item:any) => item.title.value === current.title.value
+            )
+          ) {
+            accumalator.push(current);
+          }
+          return accumalator;
+        }, []);
+        const foundMovies = res.map((m: any) => {
+          console.log('m', m);
             return {
                 title: m.title.value,
                 description: "test",
                 releaseYear: (m.releaseYear) ? m.releaseYear.value : "Undefined",
-                urlThumbnail: (m.thumbnail) ? m.thumbnail.value : "http://imgsrc.cineserie.com/2017/02/Filmandclapboard.jpg?ver=1",
+                urlThumbnail: (m.urlThumbnail) ? m.urlThumbnail.value : "https://imgsrc.cineserie.com/2017/02/Filmandclapboard.jpg?ver=1",
                 ranking: 2.5
             }
         });

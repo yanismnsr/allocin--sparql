@@ -21,58 +21,26 @@ export class Service {
     return Service.instance;
   }
 
-  public async fetchMovie(q: any, p: any) {
-    const prefixes : string [] = [
-      'PREFIX dbo: <http://dbpedia.org/ontology/>',
-      'PREFIX dbpedia2: <http://dbpedia.org/property/>',
-      'PREFIX dct: <http://purl.org/dc/terms/>'
-  ]
-
-  const query = prefixes.join("\n") +
-      'SELECT DISTINCT *  WHERE {' +
-      '?movie a <http://dbpedia.org/ontology/Film> .'+
-      setCriterias(q) + movieParameters() +
-      '} ORDER BY DESC(?released) ' +
-      setPaginations(p);
-
-    console.log(query);
-    const parsedQuery = this.sparqlParser.parse(query);
-
-    const stringQuery = this.sparqlGenerator.stringify(parsedQuery);
-    console.log(stringQuery);
-
-    // Make request to dbpedia
-    const response = await trackPromise(
-      fetch(
-        `http://dbpedia.org/sparql?query=${encodeURIComponent(
-          stringQuery
-        )}&format=json`
-      )
-    );
-    const json = await response.json();
-
-    return json;
-  }
-
-  public async fetchActor (q:any, p: any) {
-    const prefixes : string [] = [
+  public async fetchMovie(q: any, p: any) { 
+      const prefixes : string [] = [
         'PREFIX dbo: <http://dbpedia.org/ontology/>',
         'PREFIX dbpedia2: <http://dbpedia.org/property/>',
-        'PREFIX dbr: <http://dbpedia.org/resource/>',
-    ];
-  
+        'PREFIX dct: <http://purl.org/dc/terms/>'
+    ]
+
     const query = prefixes.join("\n") +
         'SELECT *  WHERE {' +
-        '?actor ?x dbr:Actor. '+
-        setActorCriterias(q) + actorParameters() +
-        '} ' +
+        '?movie a <http://dbpedia.org/ontology/Film> .'+
+        setCriterias(q) + movieParameters() +
+        '}' +
         setPaginations(p);
-  
-    const parsedQuery = this.sparqlParser.parse(query);
-    console.log(parsedQuery);
-    const stringQuery = this.sparqlGenerator.stringify(parsedQuery);
-    console.log(stringQuery);
-  
+
+      console.log(query);
+      const parsedQuery = this.sparqlParser.parse(query);
+
+      const stringQuery = this.sparqlGenerator.stringify(parsedQuery);
+      console.log(stringQuery);
+
       // Make request to dbpedia
       const response = await trackPromise(
         fetch(
@@ -82,8 +50,40 @@ export class Service {
         )
       );
       const json = await response.json();
+      console.log(json);
+      return  json;
+  }
   
-      return json;
+  public async fetchActor (q:any, p: any) {
+      const prefixes : string [] = [
+          'PREFIX dbo: <http://dbpedia.org/ontology/>',
+          'PREFIX dbpedia2: <http://dbpedia.org/property/>',
+          'PREFIX dbr: <http://dbpedia.org/resource/>',
+      ];
+    
+      const query = prefixes.join("\n") +
+          'SELECT *  WHERE {' +
+          '?actor ?x dbr:Actor. '+
+          setActorCriterias(q) + actorParameters() +
+          '}' +
+          setPaginations(p);
+    
+      const parsedQuery = this.sparqlParser.parse(query);
+      console.log(parsedQuery);
+      const stringQuery = this.sparqlGenerator.stringify(parsedQuery);
+      console.log(stringQuery);
+    
+        // Make request to dbpedia
+        const response = await trackPromise(
+          fetch(
+            `http://dbpedia.org/sparql?query=${encodeURIComponent(
+              stringQuery
+            )}&format=json`
+          )
+        );
+        const json = await response.json();
+    
+        return json;
   } 
 }
 
@@ -163,6 +163,9 @@ const setCriterias = (criterias: any) => {
                      FILTER(regex(?title,'.*${criterias.title}.*', 'i')) .`
     }
 }
+else{
+  criteria += `OPTIONAL {?movie dbo:title ?title.}`
+}
 if (criterias.category){
     let mots = criterias.category.split(" ");
     criterias.category = '(?=.*'+ mots.join('.*).*(?=.*') + '.*).*';
@@ -225,7 +228,7 @@ const movieParameters = () => {
   // budget
   res += `OPTIONAL {?movie dbpedia2:budget ?budget.}`;
   // wikiId
-  res += `OPTIONAL {?movie dbo:wikiPageID ?wikiId.}`;
+  res += `?movie dbo:wikiPageID ?wikiId.`;
   // country
   res += `OPTIONAL {?movie dbpedia2:country ?country.}`;
   // language
@@ -237,3 +240,4 @@ const movieParameters = () => {
   // ranking
   return res;
 }
+
