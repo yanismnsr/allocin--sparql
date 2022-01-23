@@ -19,7 +19,6 @@ export interface Movie {
     urlThumbnail?: string,
     ranking?: number
 }
-
 export default interface Actor {
     description: string,
     name: string,

@@ -2,9 +2,9 @@ import React from "react";
 
 import styles from "./film-card.module.css";
 import Rate from "../Rate/Rate";
+import IFilmCardProps from "./IFilmCardProps";
 
-export default function FilmCard(props: any) {
-
+export default function FilmCard(props: IFilmCardProps) {
 
     return(
         <div className = {styles.filmCard}>

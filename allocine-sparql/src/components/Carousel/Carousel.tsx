@@ -16,14 +16,14 @@ export default function Carousel(props:any) {
         >
             <Slider>
                 {
-                    props.movies.map((movie: Movie, key: number) => {
+                    props.movies.map((movie: Movie, key: number) => { 
                         return (
                             <Slide index={key}>
                                 <FilmCard
                                     filmTitle={movie.title}
-                                    filmYear={movie.releaseYear}
-                                    filmThumbnail={movie.urlThumbnail}
-                                    filmRanking={movie.ranking}
+                                    filmYear={movie.releaseYear!}
+                                    filmThumbnail={movie.urlThumbnail!}
+                                    filmRanking={movie.ranking!}
                                 />
                             </Slide>
                         );
