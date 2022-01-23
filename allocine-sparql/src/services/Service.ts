@@ -32,7 +32,7 @@ export class Service {
       'SELECT DISTINCT *  WHERE {' +
       '?movie a <http://dbpedia.org/ontology/Film> .'+
       setCriterias(q) + movieParameters() +
-      '}' +
+      '} ORDER BY DESC(?released) ' +
       setPaginations(p);
 
     console.log(query);
@@ -65,7 +65,7 @@ export class Service {
         'SELECT *  WHERE {' +
         '?actor ?x dbr:Actor. '+
         setActorCriterias(q) + actorParameters() +
-        '}' +
+        '} ' +
         setPaginations(p);
   
     const parsedQuery = this.sparqlParser.parse(query);

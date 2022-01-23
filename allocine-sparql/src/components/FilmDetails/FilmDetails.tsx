@@ -12,8 +12,8 @@ export default function Home (props: IFilmDetailsProps) {
 
     return (
         <div className={styles.container}>
+            something
             <div className={styles.carousel}>
-                <Carousel/>
             </div>
             <div className={styles.details}>
                 <div className={styles.title}>

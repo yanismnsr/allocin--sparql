@@ -16,7 +16,6 @@ export default function FilmCard(props: IFilmCardProps) {
                 <p className = {styles.filmTitle}>{props.filmTitle}</p>
                 <div className = {styles.row}>
                     <p className = {styles.filmYear}>{props.filmYear}</p>
-                    <Rate ranking={props.filmRanking}/>
                 </div>
             </div>
         </div>
