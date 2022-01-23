@@ -24,7 +24,7 @@ export default function Home (props: IHomeProps) {
 
     console.log(minPage);
     console.log(maxPage);
-    
+/*    
     useEffect(() => {
         const serviceInstance = Service.GetInstance();
         serviceInstance.fetchMovie({}, {size:15, page:1}).then((result) => {
@@ -45,13 +45,13 @@ export default function Home (props: IHomeProps) {
         });
 
     }, []);
-
+*/
     console.log(Array.from(Array(maxPage - minPage + 1).keys()))
 
     return (
         <div className={styles.whitetext}>
             <h1 >Latest movies</h1>
-            <MoviesGrid movies={state.movies}/>
+            <MoviesGrid movies={props.movies}/>
             <div className={styles.center}>
                 {/* {
                     Array.from(Array(maxPage - minPage + 1).keys()).map((_, i) => {

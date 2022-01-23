@@ -61,7 +61,7 @@ export default class SearchBar extends React.Component<ISearchBarProps, ISearchB
     console.log("yearMin : " + yearMin + " yearMax : " + yearMax);
     console.log("genres : " + genres);
     const serviceInstance = Service.GetInstance();
-    
+    /*
     trackPromise(serviceInstance.fetchMovie({"title": searchString, "beforeYear": yearMin, "afterYear": yearMax, "genres": genres}, {size:10, page:1})).then((result) => {
         console.log(result.results.bindings);
         const foundMovies = result.results.bindings.map((m: any) => {
@@ -80,7 +80,7 @@ export default class SearchBar extends React.Component<ISearchBarProps, ISearchB
         this.props.setMovies(foundMovies);
     });
     
-   /*
+   */
     trackPromise(serviceInstance.fetchMovieApi({"title": searchString})).then((result:any) => {
       
       const foundMovies = result.map((m: any) => {
@@ -99,7 +99,7 @@ export default class SearchBar extends React.Component<ISearchBarProps, ISearchB
           // @ts-ignore
           this.props.setMovies(foundMovies);
       });
-      */
+      
   }
 
 
