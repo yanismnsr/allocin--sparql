@@ -7,7 +7,7 @@ import { Link } from 'react-router-dom'
 
 export default function FilmCard(props: IFilmCardProps) {
     return (
-        <Link to="/details">
+        <Link to={'/details/' + props.wikiId}>
             <div className={styles.filmCard}>
                 <div className={styles.filmImageBox}>
                     <img
