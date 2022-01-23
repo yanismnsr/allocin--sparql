@@ -61,20 +61,11 @@ export default class SearchBar extends React.Component<ISearchBarProps, ISearchB
     console.log("yearMin : " + yearMin + " yearMax : " + yearMax);
     console.log("genres : " + genres);
     const serviceInstance = Service.GetInstance();
-    trackPromise(serviceInstance.fetchMovie({"title": searchString}, {size:100, page:1})).then((result) => {
-        //console.log(result.results.bindings);
-        var res = result.results.bindings.reduce((accumalator:any, current:any) => {
-          if (
-            !accumalator.some(
-              (item:any) => item.title.value === current.title.value
-            )
-          ) {
-            accumalator.push(current);
-          }
-          return accumalator;
-        }, []);
-        const foundMovies = res.map((m: any) => {
-          console.log('m', m);
+    /*
+    trackPromise(serviceInstance.fetchMovie({"title": searchString, "beforeYear": yearMin, "afterYear": yearMax, "genres": genres}, {size:10, page:1})).then((result) => {
+        console.log(result.results.bindings);
+        const foundMovies = result.results.bindings.map((m: any) => {
+          console.log(m);
             return {
                 title: m.title.value,
                 description: "test",
@@ -88,6 +79,27 @@ export default class SearchBar extends React.Component<ISearchBarProps, ISearchB
         // @ts-ignore
         this.props.setMovies(foundMovies);
     });
+    
+   */
+    trackPromise(serviceInstance.fetchMovieApi({"title": searchString})).then((result:any) => {
+      
+      const foundMovies = result.map((m: any) => {
+              return {
+                  wikiId: m.imdbid,
+                  title: m.title,
+                  description: m.title,
+                  releaseYear: m.year,
+                  urlThumbnail: (m.poster) ? m.poster : "http://imgsrc.cineserie.com/2017/02/Filmandclapboard.jpg?ver=1",
+                  type: m.type,
+              }
+          });
+
+          console.log(foundMovies);
+
+          // @ts-ignore
+          this.props.setMovies(foundMovies);
+      });
+      
   }
 
 

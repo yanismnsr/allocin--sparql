@@ -1,96 +1,110 @@
-import * as sparql from 'sparqljs'
-import { textSpanOverlapsWith } from 'typescript'
-import { trackPromise } from 'react-promise-tracker'
+import * as sparql from 'sparqljs';
+import * as imdb from 'imdb-api';
+import { textSpanOverlapsWith } from 'typescript';
+import { trackPromise } from 'react-promise-tracker';
 
 export class Service {
-    private static instance: Service
+  private static instance: Service;
 
-    // Sparql service classes
-    private sparqlGenerator: sparql.SparqlGenerator
-    private sparqlParser: sparql.SparqlParser
+  // Sparql service classes
+  private sparqlGenerator: sparql.SparqlGenerator;
+  private sparqlParser: sparql.SparqlParser;
 
-    private constructor() {
-        this.sparqlGenerator = new sparql.Generator()
-        this.sparqlParser = new sparql.Parser()
+  private constructor() {
+    this.sparqlGenerator = new sparql.Generator();
+    this.sparqlParser = new sparql.Parser();
+  }
+
+  public static GetInstance() {
+    if (!Service.instance) {
+      Service.instance = new Service();
     }
+    return Service.instance;
+  }
 
-    public static GetInstance() {
-        if (!Service.instance) {
-            Service.instance = new Service()
-        }
-        return Service.instance
-    }
+  public async fetchMovie(q: any, p: any) { 
+      const prefixes : string [] = [
+        'PREFIX dbo: <http://dbpedia.org/ontology/>',
+        'PREFIX dbpedia2: <http://dbpedia.org/property/>',
+        'PREFIX dct: <http://purl.org/dc/terms/>'
+    ]
 
-    public async fetchMovie(q: any, p: any) {
-        const prefixes: string[] = [
-            'PREFIX dbo: <http://dbpedia.org/ontology/>',
-            'PREFIX dbpedia2: <http://dbpedia.org/property/>',
-            'PREFIX dct: <http://purl.org/dc/terms/>',
-        ]
+    const query = prefixes.join("\n") +
+        'SELECT *  WHERE {' +
+        '?movie a <http://dbpedia.org/ontology/Film> .'+
+        setCriterias(q) + movieParameters() +
+        '}' +
+        setPaginations(p);
 
-        const query =
-            prefixes.join('\n') +
-            'SELECT *  WHERE {' +
-            '?movie a <http://dbpedia.org/ontology/Film> .' +
-            setCriterias(q) +
-            movieParameters() +
-            '}' +
-            setPaginations(p)
+      console.log(query);
+      const parsedQuery = this.sparqlParser.parse(query);
 
-        console.log(query)
-        const parsedQuery = this.sparqlParser.parse(query)
+      const stringQuery = this.sparqlGenerator.stringify(parsedQuery);
+      console.log(stringQuery);
 
-        const stringQuery = this.sparqlGenerator.stringify(parsedQuery)
-        console.log(stringQuery)
+      // Make request to dbpedia
+      const response = await trackPromise(
+        fetch(
+          `http://dbpedia.org/sparql?query=${encodeURIComponent(
+            stringQuery
+          )}&format=json`
+        )
+      );
+      const json = await response.json();
+      console.log(json);
 
+      return  json;
+  }
+  
+  public async fetchActor (q:any, p: any) {
+      const prefixes : string [] = [
+          'PREFIX dbo: <http://dbpedia.org/ontology/>',
+          'PREFIX dbpedia2: <http://dbpedia.org/property/>',
+          'PREFIX dbr: <http://dbpedia.org/resource/>',
+      ];
+    
+      const query = prefixes.join("\n") +
+          'SELECT *  WHERE {' +
+          '?actor ?x dbr:Actor. '+
+          setActorCriterias(q) + actorParameters() +
+          '}' +
+          setPaginations(p);
+    
+      const parsedQuery = this.sparqlParser.parse(query);
+      console.log(parsedQuery);
+      const stringQuery = this.sparqlGenerator.stringify(parsedQuery);
+      console.log(stringQuery);
+    
         // Make request to dbpedia
         const response = await trackPromise(
-            fetch(
-                `http://dbpedia.org/sparql?query=${encodeURIComponent(
-                    stringQuery
-                )}&format=json`
-            )
-        )
-        const json = await response.json()
-        console.log(json)
-        return json
+          fetch(
+            `http://dbpedia.org/sparql?query=${encodeURIComponent(
+              stringQuery
+            )}&format=json`
+          )
+        );
+        const json = await response.json();
+    
+        return json;
+  }
+  
+  public async fetchMovieApi(q: any){
+    const client = new imdb.Client({apiKey: 'fcdb092d'});
+    if(q.title){
+      return client.search({'name': q.title}).then((search) => {
+        console.log(search.results);
+          return search.results;
+      });
     }
-
-    public async fetchActor(q: any, p: any) {
-        const prefixes: string[] = [
-            'PREFIX dbo: <http://dbpedia.org/ontology/>',
-            'PREFIX dbpedia2: <http://dbpedia.org/property/>',
-            'PREFIX dbr: <http://dbpedia.org/resource/>',
-        ]
-
-        const query =
-            prefixes.join('\n') +
-            'SELECT *  WHERE {' +
-            '?actor ?x dbr:Actor. ' +
-            setActorCriterias(q) +
-            actorParameters() +
-            '}' +
-            setPaginations(p)
-
-        const parsedQuery = this.sparqlParser.parse(query)
-        console.log(parsedQuery)
-        const stringQuery = this.sparqlGenerator.stringify(parsedQuery)
-        console.log(stringQuery)
-
-        // Make request to dbpedia
-        const response = await trackPromise(
-            fetch(
-                `http://dbpedia.org/sparql?query=${encodeURIComponent(
-                    stringQuery
-                )}&format=json`
-            )
-        )
-        const json = await response.json()
-
-        return json
-    }
+    if(q.id){
+      return client.get({id: q.id}, {apiKey: 'fcdb092d'}).then((result) => {
+        return result;
+      });
+    } 
+  }
 }
 
+  
 const setActorCriterias = (criterias: any) => {
     let criteria = ``
     if (criterias.name) {
@@ -169,8 +183,8 @@ const setCriterias = (criterias: any) => {
         criterias.category = '(?=.*' + mots.join('.*).*(?=.*') + '.*).*'
         criteria += `?movie dct:subject ?s. FILTER(regex(?s, \'${criterias.category}\', 'i')) .`
     }
-    return criteria
-}
+  return criteria;
+};
 
 const setPaginations = (p: any) => {
     let page = ``
@@ -205,35 +219,35 @@ const actorParameters = () => {
 }
 
 const movieParameters = () => {
-    let res = ``
-    // title
-    // description
-    res += `OPTIONAL {?movie dbo:abstract ?description. 
-          Filter(langMatches(lang(?description),'en')).}`
-    // type
-    res += `OPTIONAL {?movie dbpedia2:type ?type.}`
-    // director
-    res += `OPTIONAL {?movie dbo:director ?director.}`
-    // growth
-    res += `OPTIONAL {?movie dbo:gross ?growth.}`
-    // producer
-    res += `OPTIONAL {?movie dbo:producer ?producer.}`
-    // runtime
-    res += `OPTIONAL {?movie dbo:runtime ?runtime.}`
-    // starring
-    res += `OPTIONAL {?movie dbo:starring ?starring.}`
-    // budget
-    res += `OPTIONAL {?movie dbpedia2:budget ?budget.}`
-    // wikiId
-    res += `?movie dbo:wikiPageID ?wikiId.`
-    // country
-    res += `OPTIONAL {?movie dbpedia2:country ?country.}`
-    // language
-    res += `OPTIONAL {?movie dbpedia2:language ?language.}`
-    // releaseYear
-    res += `OPTIONAL {?movie dbpedia2:released ?releaseYear.}`
-    // urlThumbnail
-    res += `OPTIONAL {?movie dbo:thumbnail ?urlThumbnail.}`
-    // ranking
-    return res
+  let res = ``;
+  // description
+  res += `OPTIONAL {?movie dbo:abstract ?description. 
+          Filter(langMatches(lang(?description),'en')).}`;
+  // type
+  res += `OPTIONAL {?movie dbpedia2:type ?type.}`;
+  // director
+  res += `OPTIONAL {?movie dbo:director ?director.}`;
+  // growth
+  res += `OPTIONAL {?movie dbo:gross ?growth.}`;
+  // producer
+  res += `OPTIONAL {?movie dbo:producer ?producer.}`;
+  // runtime
+  res += `OPTIONAL {?movie dbo:runtime ?runtime.}`;
+  // starring
+  res += `OPTIONAL {?movie dbo:starring ?starring.}`;
+  // budget
+  res += `OPTIONAL {?movie dbpedia2:budget ?budget.}`;
+  // wikiId
+  res += `?movie dbo:wikiPageID ?wikiId.`;
+  // country
+  res += `OPTIONAL {?movie dbpedia2:country ?country.}`;
+  // language
+  res += `OPTIONAL {?movie dbpedia2:language ?language.}`;
+  // releaseYear
+  res += `OPTIONAL {?movie dbpedia2:released ?releaseYear.}`;
+  // urlThumbnail
+  res += `OPTIONAL {?movie dbo:thumbnail ?urlThumbnail.}`;
+  // ranking
+  return res;
 }
+
