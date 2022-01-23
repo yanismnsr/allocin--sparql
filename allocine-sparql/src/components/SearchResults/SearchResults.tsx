@@ -12,9 +12,6 @@ import { useSearchParams } from 'react-router-dom';
 import { trackPromise } from 'react-promise-tracker';
 import MoviesGrid from '../MoviesGrid/MoviesGrid';
 
-
-
-
 export default function SearchResults (props : ISearchResultsProps) {
 
     const [searchParams, setSearchParams] = useSearchParams();
@@ -51,7 +48,7 @@ export default function SearchResults (props : ISearchResultsProps) {
 
     function _imdbSearch() {
         const serviceInstance = Service.GetInstance();
-        serviceInstance.fetchMovieApi({ title: searchString }).then((result: any) => {
+        serviceInstance.fetchMovieApi({ title: searchString, page: pageNumber}).then((result: any) => {
             const foundMovies = result.map((m: any) => {
                 return {
                     wikiId: m.imdbid,
@@ -96,7 +93,7 @@ export default function SearchResults (props : ISearchResultsProps) {
 
     return (
         <div className={styles.whitetext}>
-            <h1 >Latest movies</h1>
+            <h1 >Search results</h1>
             <MoviesGrid movies={movies}/>
             <div className={styles.center}>
                 {
