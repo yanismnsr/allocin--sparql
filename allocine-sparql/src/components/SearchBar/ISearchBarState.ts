@@ -3,4 +3,5 @@ export interface ISearchBarState {
     yearMin: number;
     yearMax: number;
     genres: string[];
+    searchOption: string;
 }
