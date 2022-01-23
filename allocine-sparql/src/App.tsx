@@ -9,7 +9,6 @@ import {Movie} from "./models/types";
 import Home from './components/Home/Home';
 import {Service} from "./services/Service";
 import {Spinner} from "./components/Spinner/Spinner";
-import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 
 
 function App() {
