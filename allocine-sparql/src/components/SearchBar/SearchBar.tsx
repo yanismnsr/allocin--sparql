@@ -8,18 +8,17 @@ import { Service } from '../../services/Service'
 import MultiRangeSlider from './../MultiRangeSlider'
 import { trackPromise } from 'react-promise-tracker'
 import { useNavigate } from 'react-router-dom'
-import { BrowserRouter, Link, Route, Routes} from "react-router-dom";
+import { BrowserRouter, Link, Route, Routes } from 'react-router-dom'
 
 export default function SearchBar(props: ISearchBarProps) {
-
-    const navigate = useNavigate();
+    const navigate = useNavigate()
 
     const [state, setState] = React.useState<ISearchBarState>({
         searchString: 'Enter a movie...',
         yearMin: 1891,
         yearMax: 2022,
         genres: [],
-        searchOption: "Sparql search"
+        searchOption: 'Sparql search',
     })
 
     function _handleChange(event: React.ChangeEvent<HTMLInputElement>) {
@@ -28,7 +27,7 @@ export default function SearchBar(props: ISearchBarProps) {
             yearMin: state.yearMin,
             yearMax: state.yearMax,
             genres: state.genres,
-            searchOption: state.searchOption
+            searchOption: state.searchOption,
         })
     }
 
@@ -45,14 +44,15 @@ export default function SearchBar(props: ISearchBarProps) {
     }
 
     function _handleSearch() {
-        
         // Build the sparql query
         const { searchString, yearMin, yearMax, genres } = state
         console.log('searchString : ' + searchString)
         console.log('yearMin : ' + yearMin + ' yearMax : ' + yearMax)
         console.log('genres : ' + genres)
         const serviceInstance = Service.GetInstance()
-        navigate(`/search?searchString=${searchString}&yearMin=${yearMin}&yearMax=${yearMax}&searchMethod=${state.searchOption}`)
+        navigate(
+            `/search?searchString=${searchString}&yearMin=${yearMin}&yearMax=${yearMax}&searchMethod=${state.searchOption}`
+        )
         /*
     trackPromise(serviceInstance.fetchMovie({"title": searchString, "beforeYear": yearMin, "afterYear": yearMax, "genres": genres}, {size:10, page:1})).then((result) => {
         console.log(result.results.bindings);
@@ -78,7 +78,7 @@ export default function SearchBar(props: ISearchBarProps) {
         ).then((result: any) => {
             const foundMovies = result.map((m: any) => {
                 return {
-                    wikiId: m.imdbid,
+                    imdbId: m.imdbid,
                     title: m.title,
                     description: m.title,
                     releaseYear: m.year,
@@ -96,15 +96,15 @@ export default function SearchBar(props: ISearchBarProps) {
         })
     }
 
-    function _handleSearchTypeChange(option : string) {
+    function _handleSearchTypeChange(option: string) {
         console.log(option)
         setState({
             searchString: state.searchString,
             yearMin: state.yearMin,
             yearMax: state.yearMax,
             genres: state.genres,
-            searchOption: option
-        });
+            searchOption: option,
+        })
     }
 
     return (
@@ -180,15 +180,36 @@ export default function SearchBar(props: ISearchBarProps) {
                                 <MultiRangeSlider
                                     min={1891}
                                     max={2022}
-                                    onChange={({min, max}) => {state.yearMax = max; state.yearMin = min;}}
+                                    onChange={({ min, max }) => {
+                                        state.yearMax = max
+                                        state.yearMin = min
+                                    }}
                                 />
                             </div>
                         </div>
-                        <div className={styles.radioGroup} >
-                            <input  type="radio" value="Sparql search" checked={state.searchOption === "Sparql search"} onChange={() => _handleSearchTypeChange("Sparql search")}/>
-                            <label className={styles.buttonDropdown}>Sparql search</label>
-                            <input  type="radio" value="IMDB search" checked={state.searchOption === "IMDB search"} onChange={() => _handleSearchTypeChange( "IMDB search")}/>
-                            <label className={styles.buttonDropdown}>IMDB search</label>
+                        <div className={styles.radioGroup}>
+                            <input
+                                type="radio"
+                                value="Sparql search"
+                                checked={state.searchOption === 'Sparql search'}
+                                onChange={() =>
+                                    _handleSearchTypeChange('Sparql search')
+                                }
+                            />
+                            <label className={styles.buttonDropdown}>
+                                Sparql search
+                            </label>
+                            <input
+                                type="radio"
+                                value="IMDB search"
+                                checked={state.searchOption === 'IMDB search'}
+                                onChange={() =>
+                                    _handleSearchTypeChange('IMDB search')
+                                }
+                            />
+                            <label className={styles.buttonDropdown}>
+                                IMDB search
+                            </label>
                         </div>
                     </div>
                 </div>
@@ -203,7 +224,6 @@ export default function SearchBar(props: ISearchBarProps) {
         </div>
     )
 }
-
 
 // export default class SearchBar extends React.Component<
 //     ISearchBarProps,
@@ -281,7 +301,7 @@ export default function SearchBar(props: ISearchBarProps) {
 //         // @ts-ignore
 //         this.props.setMovies(foundMovies);
 //     });
-    
+
 //    */
 //         trackPromise(
 //             serviceInstance.fetchMovieApi({ title: searchString })

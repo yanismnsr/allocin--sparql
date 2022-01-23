@@ -25,6 +25,7 @@ function App() {
                 return {
                     title: m.title.value,
                     description: 'test',
+                    wikiId: m.wikiId.value,
                     releaseYear: m.releaseYear?.value,
                     urlThumbnail: m.urlThumbnail?.value,
                 }
