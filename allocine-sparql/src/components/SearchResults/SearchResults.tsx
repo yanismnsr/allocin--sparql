@@ -44,7 +44,6 @@ export default function SearchResults(props: ISearchResultsProps) {
                     console.log(m)
                     return {
                         title: m.title.value,
-                        wikiId: m.wikiId.value,
                         description: 'test',
                         releaseYear: m.releaseYear
                             ? m.releaseYear.value
@@ -67,6 +66,7 @@ export default function SearchResults(props: ISearchResultsProps) {
                 const foundMovies = result.map((m: any) => {
                     return {
                         wikiId: m.imdbid,
+                        isImdb: true,
                         title: m.title,
                         description: m.title,
                         releaseYear: m.year,
@@ -76,6 +76,7 @@ export default function SearchResults(props: ISearchResultsProps) {
                         type: m.type,
                     }
                 })
+                setMovies(foundMovies)
             })
     }
 
