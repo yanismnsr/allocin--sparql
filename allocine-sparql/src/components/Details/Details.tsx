@@ -1,19 +1,51 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useLocation } from 'react-router-dom'
 import { Route, Routes, useMatch } from 'react-router-dom'
 import styles from './Details.module.css'
 import { trackPromise } from 'react-promise-tracker'
 import { Service } from '../../services/Service'
-import { useParams } from 'react-router-dom'
+
+import { useSearchParams } from 'react-router-dom'
+import IDetailsState from './IDetailsState'
 
 export default function Details(props: any) {
     const serviceInstance = Service.GetInstance()
-    let { id } = useParams()
-    console.log(id)
-    trackPromise(serviceInstance.fetchMovieApi({ wikiId: props.wikiId })).then(
+    const [searchParams, setSearchParams] = useSearchParams()
+    const isImdb = searchParams.get('isImdb')
+    const id = searchParams.get('id')
+    useEffect(() => {
+        console.log('updating in use effect')
+        _handleSearch()
+    }, [searchString, yearMin, yearMax, searchMethod, pageNumber])
+
+    
+    trackPromise(serviceInstance.fetchMovieApi({ id: id })).then(
         (result: any) => {
-            console.log(result)
+            if (result != undefined)
+   
         }
+    )
+
+    return (
+        <div>
+            <h2 className={styles.whitetext}>Details page</h2>
+            <div className={styles.filmCard}>
+                <div className={styles.filmImageBox}>
+                    <img
+                        className={styles.filmImage}
+                        src={props.filmThumbnail}
+                        alt=""
+                    />
+                </div>
+
+                <div className={styles.filmContent}>
+                    <p className={styles.filmTitle}>{props.movie}</p>
+                    <div className={styles.row}>
+                        <p className={styles.filmYear}>{props.filmYear}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
     )
 
     // const serviceInstance = Service.GetInstance()
@@ -45,9 +77,4 @@ export default function Details(props: any) {
     //         })
     //         setMovies(foundMovies)
     //     })
-
-    const match = useMatch('/details/:item')
-    console.log(match?.params)
-
-    return <h2 className={styles.whitetext}>Details page</h2>
 }
