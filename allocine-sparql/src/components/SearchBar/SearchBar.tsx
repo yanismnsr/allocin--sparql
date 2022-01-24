@@ -53,47 +53,6 @@ export default function SearchBar(props: ISearchBarProps) {
         navigate(
             `/search?searchString=${searchString}&yearMin=${yearMin}&yearMax=${yearMax}&searchMethod=${state.searchOption}`
         )
-        /*
-    trackPromise(serviceInstance.fetchMovie({"title": searchString, "beforeYear": yearMin, "afterYear": yearMax, "genres": genres}, {size:10, page:1})).then((result) => {
-        console.log(result.results.bindings);
-        const foundMovies = result.results.bindings.map((m: any) => {
-          console.log(m);
-            return {
-                title: m.title.value,
-                description: "test",
-                releaseYear: (m.releaseYear) ? m.releaseYear.value : "Undefined",
-                urlThumbnail: (m.urlThumbnail) ? m.urlThumbnail.value : "https://imgsrc.cineserie.com/2017/02/Filmandclapboard.jpg?ver=1",
-                ranking: 2.5
-            }
-        });
-        console.log(foundMovies);
-
-        // @ts-ignore
-        this.props.setMovies(foundMovies);
-    });
-    
-   */
-        trackPromise(
-            serviceInstance.fetchMovieApi({ title: searchString })
-        ).then((result: any) => {
-            const foundMovies = result.map((m: any) => {
-                return {
-                    imdbId: m.imdbid,
-                    title: m.title,
-                    description: m.title,
-                    releaseYear: m.year,
-                    urlThumbnail: m.poster
-                        ? m.poster
-                        : 'http://imgsrc.cineserie.com/2017/02/Filmandclapboard.jpg?ver=1',
-                    type: m.type,
-                }
-            })
-
-            console.log(foundMovies)
-
-            // @ts-ignore
-            this.props.setMovies(foundMovies)
-        })
     }
 
     function _handleSearchTypeChange(option: string) {

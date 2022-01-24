@@ -48,7 +48,7 @@ function App() {
                         element={<Home setMovies={setMovies} movies={movies} />}
                     />
                     <Route
-                        path="/details"
+                        path="/details/:id"
                         element={<Details selectedMovie={selectedMovie} />}
                     />
                     <Route

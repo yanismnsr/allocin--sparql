@@ -4,11 +4,12 @@ import { Route, Routes, useMatch } from 'react-router-dom'
 import styles from './Details.module.css'
 import { trackPromise } from 'react-promise-tracker'
 import { Service } from '../../services/Service'
+import { useParams } from 'react-router-dom'
 
 export default function Details(props: any) {
     const serviceInstance = Service.GetInstance()
-    const { search } = useLocation()
-
+    let { id } = useParams()
+    console.log(id)
     trackPromise(serviceInstance.fetchMovieApi({ wikiId: props.wikiId })).then(
         (result: any) => {
             console.log(result)

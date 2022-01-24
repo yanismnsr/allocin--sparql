@@ -7,7 +7,14 @@ import { Link } from 'react-router-dom'
 
 export default function FilmCard(props: IFilmCardProps) {
     return (
-        <Link to={'/details/' + props.wikiId}>
+        <Link
+            to={
+                '/details/' +
+                props.wikiId +
+                '&isImdb=' +
+                (props.wikiId == undefined).toString()
+            }
+        >
             <div className={styles.filmCard}>
                 <div className={styles.filmImageBox}>
                     <img
