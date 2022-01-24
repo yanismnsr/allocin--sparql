@@ -62,7 +62,7 @@ export default function SearchResults(props: ISearchResultsProps) {
     function _imdbSearch() {
         const serviceInstance = Service.GetInstance()
         serviceInstance
-            .fetchMovieApi({ title: searchString })
+            .fetchMovieApi({ title: searchString, page: pageNumber })
             .then((result: any) => {
                 const foundMovies = result.map((m: any) => {
                     return {
@@ -76,7 +76,6 @@ export default function SearchResults(props: ISearchResultsProps) {
                         type: m.type,
                     }
                 })
-                setMovies(foundMovies)
             })
     }
 
@@ -106,7 +105,7 @@ export default function SearchResults(props: ISearchResultsProps) {
 
     return (
         <div className={styles.whitetext}>
-            <h1>Latest movies</h1>
+            <h1>Search results</h1>
             <MoviesGrid movies={movies} />
             <div className={styles.center}>
                 {Array.from(Array(maxPage - minPage + 1).keys()).map((_, i) => {
