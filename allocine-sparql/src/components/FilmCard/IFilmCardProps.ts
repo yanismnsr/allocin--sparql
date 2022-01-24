@@ -4,4 +4,5 @@ export default interface IFilmCardProps {
     filmYear?: string
     filmRanking?: number
     wikiId?: number
+    isImdb?: boolean
 }

@@ -48,7 +48,7 @@ function App() {
                         element={<Home setMovies={setMovies} movies={movies} />}
                     />
                     <Route
-                        path="/details/:id"
+                        path="/details/"
                         element={<Details selectedMovie={selectedMovie} />}
                     />
                     <Route
@@ -56,8 +56,6 @@ function App() {
                         element={<SearchResults searchString={searchString} />}
                     />
                 </Routes>
-                <Spinner />
-                {/* <Carousel movies={movies}/> */}
             </div>
         </BrowserRouter>
     )

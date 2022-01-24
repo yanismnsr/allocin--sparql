@@ -67,7 +67,7 @@ export class Service {
             'PREFIX dbpedia2: <http://dbpedia.org/property/>',
             'PREFIX dbr: <http://dbpedia.org/resource/>',
             'PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>',
-            'PREFIX dbpedia: <http://dbpedia.org/resource/>'
+            'PREFIX dbpedia: <http://dbpedia.org/resource/>',
         ]
 
         const query =
@@ -217,7 +217,7 @@ const actorParameters = () => {
     res += `OPTIONAL {?actor dbo:abstract ?description. 
           Filter(langMatches(lang(?description),'en')).} `
     // urlThumbnail
-    res += `OPTIONAL {?actor dbo:thumbnail ?thumbnail.} ` 
+    res += `OPTIONAL {?actor dbo:thumbnail ?thumbnail.} `
     // name
     res += `OPTIONAL {?actor dbo:birthName ?name.
                     Filter(langMatches(lang(?name),'en')).} `

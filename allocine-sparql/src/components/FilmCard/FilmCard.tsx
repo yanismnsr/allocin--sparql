@@ -9,10 +9,10 @@ export default function FilmCard(props: IFilmCardProps) {
     return (
         <Link
             to={
-                '/details/' +
+                '/details?id=' +
                 props.wikiId +
                 '&isImdb=' +
-                (props.wikiId == undefined).toString()
+                (props.isImdb == undefined).toString()
             }
         >
             <div className={styles.filmCard}>
