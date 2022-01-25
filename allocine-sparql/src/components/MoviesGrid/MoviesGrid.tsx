@@ -20,6 +20,7 @@ export default function MoviesGrid(props: IMoviesGridProps) {
                     >
                         <FilmCard
                             wikiId={movie.wikiId}
+                            isImdb={movie.isImdb}
                             filmTitle={movie.title}
                             filmYear={movie.releaseYear!}
                             filmThumbnail={movie.urlThumbnail!}

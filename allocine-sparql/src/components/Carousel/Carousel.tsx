@@ -26,6 +26,7 @@ export default function Carousel(props: any) {
                         <Slide index={key}>
                             <FilmCard
                                 wikiId={movie.wikiId}
+                                isImdb={movie.isImdb}
                                 filmTitle={movie.title}
                                 filmYear={movie.releaseYear!}
                                 filmThumbnail={movie.urlThumbnail!}
