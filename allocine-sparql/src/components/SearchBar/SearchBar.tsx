@@ -15,8 +15,7 @@ export default function SearchBar(props: ISearchBarProps) {
 
     const [state, setState] = React.useState<ISearchBarState>({
         searchString: 'Enter a movie...',
-        yearMin: 1891,
-        yearMax: 2022,
+        year: '',
         genres: [],
         searchOption: 'Sparql search',
     })
@@ -24,8 +23,17 @@ export default function SearchBar(props: ISearchBarProps) {
     function _handleChange(event: React.ChangeEvent<HTMLInputElement>) {
         setState({
             searchString: event.target.value,
-            yearMin: state.yearMin,
-            yearMax: state.yearMax,
+            year: state.year,
+            genres: state.genres,
+            searchOption: state.searchOption,
+        })
+    }
+
+
+    function _handleYearChange(event: React.ChangeEvent<HTMLInputElement>) {
+        setState({
+            searchString: state.searchString,
+            year: event.target.value,
             genres: state.genres,
             searchOption: state.searchOption,
         })
@@ -45,13 +53,13 @@ export default function SearchBar(props: ISearchBarProps) {
 
     function _handleSearch() {
         // Build the sparql query
-        const { searchString, yearMin, yearMax, genres } = state
+        const { searchString, year, genres } = state
         console.log('searchString : ' + searchString)
-        console.log('yearMin : ' + yearMin + ' yearMax : ' + yearMax)
+        console.log('year : ' + year)
         console.log('genres : ' + genres)
         const serviceInstance = Service.GetInstance()
         navigate(
-            `/search?searchString=${searchString}&yearMin=${yearMin}&yearMax=${yearMax}&searchMethod=${state.searchOption}`
+            `/search?searchString=${searchString}&year=${year}&searchMethod=${state.searchOption}`
         )
     }
 
@@ -59,8 +67,7 @@ export default function SearchBar(props: ISearchBarProps) {
         console.log(option)
         setState({
             searchString: state.searchString,
-            yearMin: state.yearMin,
-            yearMax: state.yearMax,
+            year: state.year,
             genres: state.genres,
             searchOption: option,
         })
@@ -82,70 +89,17 @@ export default function SearchBar(props: ISearchBarProps) {
                         className={styles.inputSearchBar}
                     />
                     <div className={styles.boxFiltres}>
-                        <div className={styles.dropdown}>
-                            <button className={styles.buttonDropdown}>
-                                Genre
-                            </button>
-                            <div className={styles.dropdownContent}>
-                                <p>
-                                    <input
-                                        type="checkbox"
-                                        id="action"
-                                        name="genre"
-                                        value="action"
-                                        onChange={_addOrRemoveGenre}
-                                    />
-                                    <label>Action</label>
-                                </p>
-                                <p>
-                                    <input
-                                        type="checkbox"
-                                        id="thriller"
-                                        name="genre"
-                                        value="comic"
-                                        onChange={_addOrRemoveGenre}
-                                    />
-                                    <label>Comic</label>
-                                </p>
-                                <p>
-                                    <input
-                                        type="checkbox"
-                                        id="romance"
-                                        name="genre"
-                                        value="romance"
-                                        onChange={_addOrRemoveGenre}
-                                    />
-                                    <label>Romance</label>
-                                </p>
-                                <p>
-                                    <input
-                                        type="checkbox"
-                                        id="thriller"
-                                        name="genre"
-                                        value="thriller"
-                                        onChange={_addOrRemoveGenre}
-                                    />
-                                    <label>Thriller</label>
-                                </p>
-                            </div>
-                        </div>
-                        <div className={styles.dropdown}>
-                            <button className={styles.buttonDropdown}>
-                                Year
-                            </button>
-                            <div
-                                className={`${styles.dropdownContent} ${styles.dropdownYear}`}
-                            >
-                                <MultiRangeSlider
-                                    min={1891}
-                                    max={2022}
-                                    onChange={({ min, max }) => {
-                                        state.yearMax = max
-                                        state.yearMin = min
-                                    }}
+                            <div className={styles.dropdown}>
+                            <button className={styles.buttonDropdown}>Year</button>
+                              <div className={`${styles.dropdownContent} ${styles.dropdownYear}`}>
+                                <input
+                                    type="number"
+                                    id="year"
+                                    onChange={_handleYearChange}
+                                    className={styles.inputYear}
                                 />
+                              </div>
                             </div>
-                        </div>
                         <div className={styles.radioGroup}>
                             <input
                                 type="radio"

@@ -27,6 +27,17 @@
     font-family: "Lucida Console", "Courier New", monospace;
 }
 
+.inputYear {
+    padding: 1em;
+    margin: 0.5em;
+    height: 2.5em;
+    border-radius: 0.5em;
+    background-color: #1B1B2A;
+    border: 1px solid #343447;
+    color: #9E9CB4;
+    font-family: "Lucida Console", "Courier New", monospace;
+}
+
 .searchButton {
     margin-bottom: 2.5em;
     padding: 1em;

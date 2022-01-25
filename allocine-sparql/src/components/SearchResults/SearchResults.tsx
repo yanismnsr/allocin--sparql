@@ -18,8 +18,7 @@ export default function SearchResults(props: ISearchResultsProps) {
     const searchString = searchParams.get('searchString')
     const ppageNumber = Number.parseInt(searchParams.get('page') || '1')
     const searchMethod = searchParams.get('searchMethod')
-    const yearMin = searchParams.get('yearMin')
-    const yearMax = searchParams.get('yearMax')
+    const year = searchParams.get('year')
 
     const [movies, setMovies] = useState<Movie[]>([])
     const [pageNumber, setPageNumber] = useState<number>(ppageNumber)
@@ -32,9 +31,7 @@ export default function SearchResults(props: ISearchResultsProps) {
         serviceInstance
             .fetchMovie(
                 {
-                    title: searchString,
-                    beforeYear: yearMin,
-                    afterYear: yearMax,
+                    title: searchString
                 },
                 { size: 15, page: pageNumber }
             )
@@ -61,7 +58,7 @@ export default function SearchResults(props: ISearchResultsProps) {
     function _imdbSearch() {
         const serviceInstance = Service.GetInstance()
         serviceInstance
-            .fetchMovieApi({ title: searchString, page: pageNumber })
+            .fetchMovieApi({ title: searchString, year: year, page: pageNumber })
             .then((result: any) => {
                 const foundMovies = result.map((m: any) => {
                     return {
@@ -83,7 +80,6 @@ export default function SearchResults(props: ISearchResultsProps) {
     function _handleSearch() {
         // Build the sparql query
         console.log('searchString : ' + searchString)
-        console.log('yearMin : ' + yearMin + ' yearMax : ' + yearMax)
         console.log('searchMethod : ' + searchMethod)
         if (searchMethod === 'Sparql search') {
             _sparqlSearch()
@@ -102,7 +98,7 @@ export default function SearchResults(props: ISearchResultsProps) {
     useEffect(() => {
         console.log('updating in use effect')
         _handleSearch()
-    }, [searchString, yearMin, yearMax, searchMethod, pageNumber])
+    }, [searchString, year, searchMethod, pageNumber])
 
     return (
         <div className={styles.whitetext}>
